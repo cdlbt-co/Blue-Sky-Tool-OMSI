@@ -2,6 +2,10 @@
 
 Blue Sky Tool is developed as an advanced version of OMSI Map Tools. Blue Sky allows users to scan for missing objects, splines, AI Vehicles, parked cars, humans and drivers.
 
+## Download
+
+Download this program from our website: [cdlbt.co/bluesky](https://cdlbt.co/bluesky/)
+
 ## How to scan for missing files
 
 In the main screen, click on the `Open Map...` button. In the file selection screen, navigate to the mapfolder of choice and select the global.cfg file.
