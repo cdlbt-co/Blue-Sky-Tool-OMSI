@@ -243,7 +243,7 @@ namespace Blue_Sky
 
                                 for (int j = 0; j < length && i + length < aiList.Length; j++)
                                 {
-                                    if (!aicars.Contains(aiList[i+j]))
+                                    if (!aicars.Contains(aiList[i + j]))
                                     {
                                         aicars.Add(aiList[i + j]);
                                         if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + aiList[i + j]))
@@ -288,7 +288,7 @@ namespace Blue_Sky
                         string[] parkcars = File.ReadAllLines(Directory.GetParent(pickMapFile.FileName) + "\\" + parklist);
                         foreach (string car in parkcars)
                         {
-                            if(!objects.Contains(car))
+                            if (!objects.Contains(car))
                             {
                                 objects.Add(car);
                                 if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + car))
