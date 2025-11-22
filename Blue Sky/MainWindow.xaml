@@ -5,17 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blue_Sky"
         mc:Ignorable="d"
-        Title="Blue Sky Tool" Height="728" Width="1024" Background="#FFE5E5E5" x:Name="BlueSkyWindow" WindowStartupLocation="CenterScreen">
+        Title="Blue Sky Tool" Height="984" Width="1280" x:Name="BlueSkyWindow" WindowStartupLocation="CenterScreen">
     <Grid Margin="4">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="103*"/>
-            <ColumnDefinition Width="905*"/>
-        </Grid.ColumnDefinitions>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="4" Grid.ColumnSpan="2">
             <TabItem Header="Map Information" Padding="8,4">
                 <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="4">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="34"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0">
@@ -29,7 +25,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid Margin="4" Grid.Column="0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="336"/>
+                                <RowDefinition Height="400"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0">

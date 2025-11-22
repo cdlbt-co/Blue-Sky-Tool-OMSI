@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blue_Sky"
         mc:Ignorable="d"
-        Title="Loading..." Height="62" Width="400" ResizeMode="NoResize" ShowInTaskbar="False" BorderBrush="DarkGray" BorderThickness="1" WindowStartupLocation="CenterScreen" WindowStyle="None">
+        Title="Loading..." Height="44" Width="400" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid Margin="4">
         <Label x:Name="lblLoading"/>
-        <ProgressBar VerticalAlignment="Bottom" Margin="4" Height="24" x:Name="pbrLoading" x:FieldModifier="public"/>
+        <ProgressBar VerticalAlignment="Bottom" Margin="4" x:Name="pbrLoading" x:FieldModifier="public"/>
     </Grid>
 </Window>
