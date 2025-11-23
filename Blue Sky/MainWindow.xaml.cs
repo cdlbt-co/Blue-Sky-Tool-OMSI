@@ -1,19 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
 
 namespace Blue_Sky
 {
@@ -83,6 +75,7 @@ namespace Blue_Sky
             OpenFileDialog pickMapFile = new OpenFileDialog();
             pickMapFile.Filter = "OMSI Map File|global.cfg|All files (*.*)|*.*";
             pickMapFile.InitialDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\OMSI 2\maps";
+            pickMapFile.ShowHiddenItems = true;
 
             if (pickMapFile.ShowDialog() == true)
             {
@@ -163,15 +156,6 @@ namespace Blue_Sky
                             }
                         }
                     }
-
-                    // Count tile after reading map file
-                    // No, this step is merged with object spline counting etc
-
-                    //this.Dispatcher.Invoke((Action)(() =>
-                    //{
-                    //    txtMapTileCount.Text = tiles.Count.ToString();
-                    //    txtMapTileMissing.Text = tilesMissing.Count.ToString();
-                    //}));
 
                     // Set progress bar to 10 after finish reading for tiles
                     this.Dispatcher.Invoke((Action)(() =>
@@ -349,11 +333,6 @@ namespace Blue_Sky
                     }));
 
                     // Sort data and output to textboxes
-                    /*
-                     * No need to sort tiles for easy reference to global.cfg
-                     * tiles.Sort();
-                     * tilesMissing.Sort();
-                     */
                     objects.Sort();
                     objectsMissing.Sort();
                     splines.Sort();
