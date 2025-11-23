@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11217.181 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blue Sky", "Blue Sky\Blue Sky.csproj", "{61A5BF67-58F7-4580-A6FB-D31BC98680C9}"
 EndProject

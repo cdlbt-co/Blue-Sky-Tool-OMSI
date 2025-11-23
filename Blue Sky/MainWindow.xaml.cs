@@ -97,6 +97,7 @@ namespace Blue_Sky
 
                 // Show map load screen
                 MapLoadScreen m = new MapLoadScreen();
+                m.Topmost = true;
                 m.Show();
 
                 Task task = Task.Factory.StartNew(() =>
