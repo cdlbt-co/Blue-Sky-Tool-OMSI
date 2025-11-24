@@ -1,17 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>Blue_Sky</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <ApplicationIcon>bluesky.ico</ApplicationIcon>
-    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <Resource Include="bluesky.ico" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
+		<OutputType>WinExe</OutputType>
+		<RootNamespace>Blue_Sky</RootNamespace>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWPF>true</UseWPF>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+		<ApplicationIcon>bluesky.ico</ApplicationIcon>
+		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<Resource Include="bluesky.ico" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+		<RuntimeHostConfigurationOption Include="Switch.System.Windows.Appearance.DisableFluentThemeWindowBackdrop" Value="true" />
+	</ItemGroup>
 </Project>
