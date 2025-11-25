@@ -23,7 +23,7 @@ namespace Blue_Sky
         {
             OpenFileDialog pickLogFile = new OpenFileDialog
             {
-                Filter = "OMSI Log File|logfile.txt|All files|*.*",
+                Filter = "OMSI Log File|*.txt|All files|*.*",
                 InitialDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\OMSI 2"
             };
 
@@ -32,41 +32,68 @@ namespace Blue_Sky
                 tabLogFile_Clear();
                 txtLogFileDir.Text = pickLogFile.FileName;
 
-                string[] logfile = File.ReadAllLines(pickLogFile.FileName);
-
-                List<string> info = new List<string>();
-                List<string> warn = new List<string>();
-                List<string> error = new List<string>();
-                foreach (string line in logfile)
+                // Show map load screen
+                MapLoadScreen m = new()
                 {
-                    if (line.Contains(" -  -   "))
-                    {
-                        // Remove the time prefix of log file entries
-                        string newLine = line.Split(new[] { " -  -   " }, StringSplitOptions.None)[1].TrimStart();
+                    Topmost = true
+                };
+                m.Show();
 
-                        // Check for repeating entries, only add non duplicates to list and list box
-                        if (newLine.StartsWith("Information:") && !info.Contains(newLine.Substring(13)))
+                Task task = Task.Factory.StartNew(() =>
+                {
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        m.lblLoading.Content = "Reading logfile.txt...";
+                        BlueSkyWindow.IsEnabled = false;
+                    }));
+
+                    string[] logfile = File.ReadAllLines(pickLogFile.FileName);
+
+                    HashSet<string> readInfo = new(StringComparer.OrdinalIgnoreCase);
+                    HashSet<string> readWarn = new(StringComparer.OrdinalIgnoreCase);
+                    HashSet<string> readError = new(StringComparer.OrdinalIgnoreCase);
+                    List<string> info = [];
+                    List<string> warn = [];
+                    List<string> error = [];
+
+                    foreach (string line in logfile)
+                    {
+                        if (line.Contains(" -  -   "))
                         {
-                            newLine = newLine.Substring(13);
-                            info.Add(newLine);
-                            txtLogFileInfo.Text += newLine + "\r\n";
-                        }
-                        if (newLine.StartsWith("Warning:") && !warn.Contains(newLine.Substring(15)))
-                        {
-                            newLine = newLine.Substring(15);
-                            warn.Add(newLine);
-                            txtLogFileWarn.Text += newLine + "\r\n";
-                        }
-                        if (newLine.StartsWith("Error:") && !error.Contains(newLine.Substring(17)))
-                        {
-                            newLine = newLine.Substring(17);
-                            error.Add(newLine);
-                            txtLogFileError.Text += newLine + "\r\n";
+                            // Remove the time prefix of log file entries
+                            string newLine = line.Split([" -  -   "], StringSplitOptions.None)[1].TrimStart();
+
+                            // Check for repeating entries, only add non duplicates to list and list box
+                            if (newLine.StartsWith("Information:") && readInfo.Add(newLine[13..]))
+                            {
+                                info.Add(newLine[13..]);
+                            }
+                            if (newLine.StartsWith("Warning:") && readWarn.Add(newLine[15..]))
+                            {
+                                warn.Add(newLine[15..]);
+                            }
+                            if (newLine.StartsWith("Error:") && readError.Add(newLine[17..]))
+                            {
+                                error.Add(newLine[17..]);
+                            }
                         }
                     }
-                    tabLogFileWarn.Header = "Warnings (" + warn.Count + ")";
-                    tabLogFileError.Header = "Errors (" + error.Count + ")";
-                }
+
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        m.lblLoading.Content = "Collecting Data...";
+
+                        tabLogFileWarn.Header = "Warnings (" + warn.Count + ")";
+                        tabLogFileError.Header = "Errors (" + error.Count + ")";
+                        txtLogFileInfo.Text = String.Join("\r\n", info);
+                        txtLogFileWarn.Text = String.Join("\r\n", warn);
+                        txtLogFileError.Text = String.Join("\r\n", error);
+
+                        // Re-enable main window and close loading screen
+                        BlueSkyWindow.IsEnabled = true;
+                        m.Close();
+                    }));
+                });
             }
         }
 
@@ -89,8 +116,10 @@ namespace Blue_Sky
                 txtMapDir.Text = pickMapFile.FileName;
 
                 // Show map load screen
-                MapLoadScreen m = new MapLoadScreen();
-                m.Topmost = true;
+                MapLoadScreen m = new()
+                {
+                    Topmost = true
+                };
                 m.Show();
 
                 Task task = Task.Factory.StartNew(() =>
@@ -104,16 +133,16 @@ namespace Blue_Sky
                     string[] mapFile = File.ReadAllLines(pickMapFile.FileName);
 
                     // Lists to store file locations
-                    List<string> tiles = new List<string>();
-                    List<string> tilesMissing = new List<string>();
-                    List<string> objects = new List<string>();
-                    List<string> objectsMissing = new List<string>();
-                    List<string> splines = new List<string>();
-                    List<string> splinesMissing = new List<string>();
-                    List<string> aicars = new List<string>();
-                    List<string> aicarsMissing = new List<string>();
-                    List<string> humans = new List<string>();
-                    List<string> humansMissing = new List<string>();
+                    List<string> tiles = [];
+                    List<string> tilesMissing = [];
+                    List<string> objects = [];
+                    List<string> objectsMissing = [];
+                    List<string> splines = [];
+                    List<string> splinesMissing = [];
+                    List<string> aicars = [];
+                    List<string> aicarsMissing = [];
+                    List<string> humans = [];
+                    List<string> humansMissing = [];
 
                     // Read map file
                     for (int i = 0; i < mapFile.Length; i++)
@@ -121,23 +150,18 @@ namespace Blue_Sky
                         // Read map name
                         if (mapFile[i].StartsWith("[name]") && (i + 1) < mapFile.Length)
                         {
-                            this.Dispatcher.Invoke((Action)(() =>
-                            {
-                                txtMapName.Text = mapFile[i + 1];
-                            }));
+                            this.Dispatcher.Invoke((Action)(() => txtMapName.Text = mapFile[i + 1]));
                         }
 
                         // Read description
                         else if (mapFile[i].StartsWith("[description]"))
                         {
+                            string description = "";
+
                             // Move to next line, if not end of file and description end, add line to description textbox
-                            for (i++; i < mapFile.Length && !mapFile[i].StartsWith("[end]"); i++)
-                            {
-                                this.Dispatcher.Invoke((Action)(() =>
-                                {
-                                    txtMapDescription.Text += mapFile[i] + "\r\n";
-                                }));
-                            }
+                            for (i++; i < mapFile.Length && !mapFile[i].StartsWith("[end]"); i++) description += mapFile[i] + "\r\n";
+
+                            this.Dispatcher.Invoke((Action)(() => txtMapDescription.Text = description));
                         }
 
                         // Read tile list
@@ -157,20 +181,13 @@ namespace Blue_Sky
                         }
                     }
 
-                    // Set progress bar to 10 after finish reading for tiles
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        m.pbrLoading.Value = 10;
-                    }));
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading tiles ..."));
 
                     // Scan tiles for objects and splines
                     for (int t = 0; t < tiles.Count; t++)
                     {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            m.lblLoading.Content = "Reading tiles (" + (t + 1) + "/" + tiles.Count + ")...";
-                            m.pbrLoading.Value = 10 + (double)t / (double)tiles.Count * 80d;
-                        }));
+                        /* removed tile by tile status update to speed things up */
 
                         if (File.Exists(Directory.GetParent(pickMapFile.FileName) + "\\" + tiles[t]))
                         {
@@ -206,12 +223,8 @@ namespace Blue_Sky
                         }
                     }
 
-                    // Set progress bar to 90 after finish reading for objects and splines, then set to start reading ai list
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        m.lblLoading.Content = "Reading ailist.txt...";
-                        m.pbrLoading.Value = 90;
-                    }));
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading ailist.txt..."));
 
                     // Scan ai list
 
@@ -258,12 +271,8 @@ namespace Blue_Sky
                         }
                     }
 
-                    // Set progress bar to 95 after reading ai list, then set start read parklist
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        m.lblLoading.Content = "Reading parklist_p.txt...";
-                        m.pbrLoading.Value = 95;
-                    }));
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading parklist_p.txt..."));
 
                     // Scan park list
                     String[] parklists = Directory.EnumerateFiles(Directory.GetParent(pickMapFile.FileName).ToString(), "*.txt", SearchOption.TopDirectoryOnly).Select(System.IO.Path.GetFileName).Where(f => f.StartsWith("parklist_p")).ToArray();
@@ -284,12 +293,8 @@ namespace Blue_Sky
                         }
                     }
 
-                    // Set progress bar to 98 after finish reading parklist, then set to start reading human
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        m.lblLoading.Content = "Reading humans.txt...";
-                        m.pbrLoading.Value = 98;
-                    }));
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading humans.txt..."));
 
                     // Scan humans
                     if (File.Exists(Directory.GetParent(pickMapFile.FileName) + "\\humans.txt"))
@@ -325,14 +330,11 @@ namespace Blue_Sky
                         }
                     }
 
-                    // Set progress bar to 100 after finish reading human, then set to collecting data
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        m.lblLoading.Content = "Collecting Data...";
-                        m.pbrLoading.Value = 100;
-                    }));
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Collecting Data..."));
 
                     // Sort data and output to textboxes
+                    /* No need to sort tiles for easy reference to global.cfg */
                     objects.Sort();
                     objectsMissing.Sort();
                     splines.Sort();
@@ -343,80 +345,21 @@ namespace Blue_Sky
                     humansMissing.Sort();
 
                     // Use dispatch invoke to print list to textboxes
-                    foreach (string file in tiles)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtTilesList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in tilesMissing)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtTilesMissingList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in objects)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtObjectsList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in objectsMissing)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtObjectsMissingList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in splines)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtSplinesList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in splinesMissing)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtSplinesMissingList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in aicars)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtAicarsList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in aicarsMissing)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtAicarsMissingList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in humans)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtHumansList.Text += file + "\r\n";
-                        }));
-                    }
-                    foreach (string file in humansMissing)
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            txtHumansMissingList.Text += file + "\r\n";
-                        }));
-                    }
-
                     // Output final data to first page
                     this.Dispatcher.Invoke((Action)(() =>
                     {
+                        // Use string.join to build one string instead of old foreach loops
+                        txtTilesList.Text = String.Join("\r\n", tiles);
+                        txtTilesMissingList.Text = String.Join("\r\n", tilesMissing);
+                        txtObjectsList.Text = String.Join("\r\n", objects);
+                        txtObjectsMissingList.Text = String.Join("\r\n", objectsMissing);
+                        txtSplinesList.Text = String.Join("\r\n", splines);
+                        txtSplinesMissingList.Text = String.Join("\r\n", splinesMissing);
+                        txtAicarsList.Text = String.Join("\r\n", aicars);
+                        txtAicarsMissingList.Text = String.Join("\r\n", aicarsMissing);
+                        txtHumansList.Text = String.Join("\r\n", humans);
+                        txtHumansMissingList.Text = String.Join("\r\n", humansMissing);
+
                         // Count objects and splines after reading map file
                         txtMapTileCount.Text = tiles.Count.ToString();
                         txtMapTileMissing.Text = tilesMissing.Count.ToString();
@@ -462,6 +405,10 @@ namespace Blue_Sky
             txtMapObjectMissing.Clear();
             txtMapSplineCount.Clear();
             txtMapSplineMissing.Clear();
+            txtMapAicarCount.Clear();
+            txtMapAicarMissing.Clear();
+            txtMapHumanCount.Clear();
+            txtMapHumanMissing.Clear();
             txtMapDescription.Clear();
         }
 

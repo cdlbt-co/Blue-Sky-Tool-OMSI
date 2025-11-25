@@ -8,6 +8,6 @@
         Title="Loading..." Height="44" Width="400" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid Margin="4">
         <Label x:Name="lblLoading"/>
-        <ProgressBar VerticalAlignment="Bottom" Margin="4" x:Name="pbrLoading" x:FieldModifier="public"/>
+        <ProgressBar VerticalAlignment="Bottom" Margin="4" x:Name="pbrLoading" x:FieldModifier="public" IsIndeterminate="True"/>
     </Grid>
 </Window>
