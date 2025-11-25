@@ -38,14 +38,11 @@ namespace Blue_Sky
                     Topmost = true
                 };
                 m.Show();
+                BlueSkyWindow.IsEnabled = false;
 
                 Task task = Task.Factory.StartNew(() =>
                 {
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        m.lblLoading.Content = "Reading logfile.txt...";
-                        BlueSkyWindow.IsEnabled = false;
-                    }));
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading logfile.txt..."));
 
                     string[] logfile = File.ReadAllLines(pickLogFile.FileName);
 
@@ -121,14 +118,11 @@ namespace Blue_Sky
                     Topmost = true
                 };
                 m.Show();
+                BlueSkyWindow.IsEnabled = false;
 
                 Task task = Task.Factory.StartNew(() =>
                 {
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        m.lblLoading.Content = "Reading global.cfg...";
-                        BlueSkyWindow.IsEnabled = false;
-                    }));
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading global.cfg..."));
 
                     string[] mapFile = File.ReadAllLines(pickMapFile.FileName);
 
@@ -363,19 +357,19 @@ namespace Blue_Sky
                         // Count objects and splines after reading map file
                         txtMapTileCount.Text = tiles.Count.ToString();
                         txtMapTileMissing.Text = tilesMissing.Count.ToString();
-                        tabTiles.Header = "Tiles (" + tilesMissing.Count.ToString() + " Missing)";
+                        tabTiles.Header = $"Tiles ({tilesMissing.Count.ToString()})";
                         txtMapObjectCount.Text = objects.Count.ToString();
                         txtMapObjectMissing.Text = objectsMissing.Count.ToString();
-                        tabObjects.Header = "Objects (" + objectsMissing.Count.ToString() + " Missing)";
+                        tabObjects.Header = $"Objects ({objectsMissing.Count.ToString()})";
                         txtMapSplineCount.Text = splines.Count.ToString();
                         txtMapSplineMissing.Text = splinesMissing.Count.ToString();
-                        tabSplines.Header = "Splines (" + splinesMissing.Count.ToString() + " Missing)";
+                        tabSplines.Header = $"Splines ({splinesMissing.Count.ToString()})";
                         txtMapAicarCount.Text = aicars.Count.ToString();
                         txtMapAicarMissing.Text = aicarsMissing.Count.ToString();
-                        tabAicar.Header = "AI Vehicles (" + aicarsMissing.Count.ToString() + " Missing)";
+                        tabAicar.Header = $"AI Vehicles ({aicarsMissing.Count.ToString()})";
                         txtMapHumanCount.Text = humans.Count.ToString();
                         txtMapHumanMissing.Text = humansMissing.Count.ToString();
-                        tabHuman.Header = "Humans (" + humansMissing.Count.ToString() + " Missing)";
+                        tabHuman.Header = $"Humans ({humansMissing.Count.ToString()})";
 
                         // Try to read map picture
                         try

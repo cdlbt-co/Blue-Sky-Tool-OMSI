@@ -9,6 +9,9 @@
 		<ApplicationIcon>bluesky.ico</ApplicationIcon>
 		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
 	<ItemGroup>
 		<Resource Include="bluesky.ico" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

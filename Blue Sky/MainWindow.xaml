@@ -262,7 +262,7 @@
             <TabItem Header="About" Padding="8,4">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label Content="Blue Sky Tool" HorizontalAlignment="Center" FontSize="16"/>
-                    <Label Content="Release v1.10F" HorizontalAlignment="Center" FontSize="12"/>
+                    <Label Content="Release v1.1.0" HorizontalAlignment="Center" FontSize="12"/>
                     <Label Content="© 2025 cdlbt.co All rights reserved." HorizontalAlignment="Center"/>
                 </StackPanel>
             </TabItem>
