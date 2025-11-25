@@ -7,5 +7,9 @@ namespace Blue_Sky
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            this.ShutdownMode = ShutdownMode.OnMainWindowClose;
+        }
     }
 }
