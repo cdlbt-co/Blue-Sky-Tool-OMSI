@@ -4,13 +4,18 @@ Blue Sky Tool is developed as an advanced version of OMSI Map Tools. Blue Sky al
 
 ## Download
 
-Download this program from our website: [cdlbt.co/bluesky](https://cdlbt.co/bluesky/)
+Download the lastest release [here](https://github.com/cdlbt-co/Blue-Sky-Tool-OMSI/releases/latest) on GitHub
+
+### System requirements
+
+- Windows 10 1809 or later
+- .NET Desktop Runtime (get it [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/10.0.0/windowsdesktop-runtime-10.0.0-win-x64.exe))
 
 ## How to scan for missing files
 
-In the main screen, click on the `Open Map...` button. In the file selection screen, navigate to the mapfolder of choice and select the global.cfg file.
+In the main screen, click on the `Open Map...` button. In the file selection screen, navigate to the map folder of choice and select the global.cfg file.
 
-Blue Sky Tool will now start scanning for files required by the selected map. Please wait patiently.
+Blue Sky Tool will now start scanning for files required by the selected map.
 
 After scanning, all of the essential information will show up in the main screen. You will be able to see the map name, description, preview picture, number of tiles, objects, splines, AI vehicles and humans.
 
@@ -22,13 +27,13 @@ If there are missing objects, splines, AI vehicles or humans missing, you can go
 
 To use the logfile viewer, first click on the `Logfile` tab.
 
-Then, click on the `Open log file...` button. In the file selection screen, navigate to your OMSI directory and select `logfile.txt`. If you have made a copy of your logfile and renamed the file or placed elsewhere, click on the dropdown box `OMSI Log File (logfile.txt)`, and select `All Files (*.*)`, then select your log file.
+Then, click on the `Open log file...` button. In the file selection screen, navigate to your OMSI directory and select `logfile.txt`.
 
 The tool will then scan the logfile and divide the entries to three sections - information, warnings, and errors.
 
 ## About this project
 
-This program is written in C# with WPF using Visual Studio 2019. 
+This program is written in C# with WPF with the .NET 10 using Visual Studio 2026. 
 
 ## License
 [AGPL 3.0](https://choosealicense.com/licenses/agpl-3.0/ "AGPL 3.0 License")
