@@ -9,7 +9,7 @@ Download the lastest release [here](https://github.com/cdlbt-co/Blue-Sky-Tool-OM
 ### System requirements
 
 - Windows 10 1809 or later
-- .NET Desktop Runtime (get it [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/10.0.0/windowsdesktop-runtime-10.0.0-win-x64.exe))
+- .NET Desktop Runtime 10 (get it [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/10.0.0/windowsdesktop-runtime-10.0.0-win-x64.exe))
 
 ## How to scan for missing files
 
