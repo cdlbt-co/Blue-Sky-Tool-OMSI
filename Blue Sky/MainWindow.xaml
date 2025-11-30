@@ -15,7 +15,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0">
-                        <Button Margin="4" Content="Open map..." Click="btnMap_Click" Style="{DynamicResource AccentButtonStyle}"/>
+                        <Button Margin="4" Content="Open map..." Click="btnMap_Click" Style="{DynamicResource AccentButtonStyle}" IsDefault="True"/>
                         <TextBox Margin="4" TextWrapping="NoWrap" IsReadOnly="True" x:Name="txtMapDir"/>
                     </DockPanel>
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
@@ -256,6 +256,22 @@
                             <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Courier New" IsReadOnly="True" x:Name="txtLogFileError"/>
                         </TabItem>
                     </TabControl>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="o3d" Padding="8,4">
+                <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/> 
+                    </Grid.RowDefinitions>
+                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0">
+                        <Button Content="Open o3d file..." HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4" Click="btno3d_Click" Style="{DynamicResource AccentButtonStyle}"/>
+                        <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="4" TextWrapping="NoWrap" IsReadOnly="True" x:Name="txto3dFileDir"/>
+                    </DockPanel>
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="4">
+                        <TextBox Padding="8,4" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Courier New" IsReadOnly="True" x:Name="txto3dFileInfo"/>
+                    </Grid>
 
                 </Grid>
             </TabItem>
