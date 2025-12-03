@@ -94,6 +94,57 @@ namespace Blue_Sky
             }
         }
 
+
+        private void btno3d_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog picko3dFile = new OpenFileDialog
+            {
+                Filter = "OMSI 3D File|*.o3d|All files|*.*",
+                InitialDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\OMSI 2"
+            };
+
+            if (picko3dFile.ShowDialog() == true)
+            {
+                //tabLogFile_Clear();
+                txto3dFileDir.Text = picko3dFile.FileName;
+
+                // Show map load screen
+                MapLoadScreen m = new()
+                {
+                    Topmost = true
+                };
+                m.Show();
+                BlueSkyWindow.IsEnabled = false;
+
+                Task task = Task.Factory.StartNew(() =>
+                {
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading o3d..."));
+
+                    O3D o3d = O3DReader.ReadO3D(picko3dFile.FileName);
+
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        m.lblLoading.Content = "Collecting Data...";
+
+                        if (o3d!=null) txto3dFileInfo.Text = String.Join("\r\n", o3d.GetMaterialPathList());
+
+                        // Re-enable main window and close loading screen
+                        BlueSkyWindow.IsEnabled = true;
+                        m.Close();
+                    }));
+                });
+            }
+        }
+
+        private int GetNextHeaderLocation(byte[] o3d, byte header)
+        {
+            for (int i = 0; i < o3d.Length; i++)
+            {
+                if (o3d[i] == header) return i;
+            }
+            return -1;
+        }
+
         private void btnMap_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog pickMapFile = new OpenFileDialog();
@@ -357,19 +408,19 @@ namespace Blue_Sky
                         // Count objects and splines after reading map file
                         txtMapTileCount.Text = tiles.Count.ToString();
                         txtMapTileMissing.Text = tilesMissing.Count.ToString();
-                        tabTiles.Header = $"Tiles ({tilesMissing.Count.ToString()})";
+                        tabTiles.Header = $"Tiles ({tilesMissing.Count})";
                         txtMapObjectCount.Text = objects.Count.ToString();
                         txtMapObjectMissing.Text = objectsMissing.Count.ToString();
-                        tabObjects.Header = $"Objects ({objectsMissing.Count.ToString()})";
+                        tabObjects.Header = $"Objects ({objectsMissing.Count})";
                         txtMapSplineCount.Text = splines.Count.ToString();
                         txtMapSplineMissing.Text = splinesMissing.Count.ToString();
-                        tabSplines.Header = $"Splines ({splinesMissing.Count.ToString()})";
+                        tabSplines.Header = $"Splines ({splinesMissing.Count})";
                         txtMapAicarCount.Text = aicars.Count.ToString();
                         txtMapAicarMissing.Text = aicarsMissing.Count.ToString();
-                        tabAicar.Header = $"AI Vehicles ({aicarsMissing.Count.ToString()})";
+                        tabAicar.Header = $"AI Vehicles ({aicarsMissing.Count})";
                         txtMapHumanCount.Text = humans.Count.ToString();
                         txtMapHumanMissing.Text = humansMissing.Count.ToString();
-                        tabHuman.Header = $"Humans ({humansMissing.Count.ToString()})";
+                        tabHuman.Header = $"Humans ({humansMissing.Count})";
 
                         // Try to read map picture
                         try
