@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Blue_Sky.Classes;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,8 @@ namespace Blue_Sky
     /// </summary>
     public partial class MainWindow : Window
     {
+        Map map;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -126,7 +129,7 @@ namespace Blue_Sky
                     {
                         m.lblLoading.Content = "Collecting Data...";
 
-                        if (o3d!=null) txto3dFileInfo.Text = String.Join("\r\n", o3d.GetMaterialPathList());
+                        if (o3d != null) txto3dFileInfo.Text = String.Join("\r\n", o3d.GetMaterialPathList());
 
                         // Re-enable main window and close loading screen
                         BlueSkyWindow.IsEnabled = true;
@@ -134,15 +137,6 @@ namespace Blue_Sky
                     }));
                 });
             }
-        }
-
-        private int GetNextHeaderLocation(byte[] o3d, byte header)
-        {
-            for (int i = 0; i < o3d.Length; i++)
-            {
-                if (o3d[i] == header) return i;
-            }
-            return -1;
         }
 
         private void btnMap_Click(object sender, RoutedEventArgs e)
@@ -175,11 +169,18 @@ namespace Blue_Sky
                 {
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading global.cfg..."));
 
-                    string[] mapFile = File.ReadAllLines(pickMapFile.FileName);
+                    // Read map info
+                    map = MapReader.ReadMap(pickMapFile.FileName);
+
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        txtMapName.Text = map.name;
+                        txtMapDescription.Text = map.description;
+                    }));
 
                     // Lists to store file locations
-                    List<string> tiles = [];
-                    List<string> tilesMissing = [];
+                    List<string> tiles = map.GetTilePaths();
+                    List<string> tilesMissing = map.GetMissingTilePaths();
                     List<string> objects = [];
                     List<string> objectsMissing = [];
                     List<string> splines = [];
@@ -188,43 +189,6 @@ namespace Blue_Sky
                     List<string> aicarsMissing = [];
                     List<string> humans = [];
                     List<string> humansMissing = [];
-
-                    // Read map file
-                    for (int i = 0; i < mapFile.Length; i++)
-                    {
-                        // Read map name
-                        if (mapFile[i].StartsWith("[name]") && (i + 1) < mapFile.Length)
-                        {
-                            this.Dispatcher.Invoke((Action)(() => txtMapName.Text = mapFile[i + 1]));
-                        }
-
-                        // Read description
-                        else if (mapFile[i].StartsWith("[description]"))
-                        {
-                            string description = "";
-
-                            // Move to next line, if not end of file and description end, add line to description textbox
-                            for (i++; i < mapFile.Length && !mapFile[i].StartsWith("[end]"); i++) description += mapFile[i] + "\r\n";
-
-                            this.Dispatcher.Invoke((Action)(() => txtMapDescription.Text = description));
-                        }
-
-                        // Read tile list
-                        else if (mapFile[i].StartsWith("[map]") && (i + 3) < mapFile.Length)
-                        {
-                            // Check duplicates
-                            if (!tiles.Contains(mapFile[i + 3]))
-                            {
-                                tiles.Add(mapFile[i + 3]);
-
-                                // Check missing tiles at the same time, if file not exist add to missing tiles list
-                                if (!File.Exists(Directory.GetParent(pickMapFile.FileName) + "\\" + mapFile[i + 3]))
-                                {
-                                    tilesMissing.Add(mapFile[i + 3]);
-                                }
-                            }
-                        }
-                    }
 
                     // Status update
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading tiles ..."));

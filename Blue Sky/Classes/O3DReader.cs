@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Blue_Sky
+namespace Blue_Sky.Classes
 {
     internal static class O3DReader
     {
@@ -71,8 +71,8 @@ namespace Blue_Sky
         {
             // Get vertex count
             cursor++;
-            int vertCount = is4ByteCount ? 
-                BitConverter.ToInt32(o3dBytes, cursor) : 
+            int vertCount = is4ByteCount ?
+                BitConverter.ToInt32(o3dBytes, cursor) :
                 BitConverter.ToInt16(o3dBytes, cursor);
             cursor += is4ByteCount ? 4 : 2;
 

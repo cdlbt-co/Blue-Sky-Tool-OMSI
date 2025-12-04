@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Blue_Sky
+namespace Blue_Sky.Classes
 {
     public class O3D
     {
-        private readonly List<Material> materials;
-
-        public O3D() {
-            materials = [];
-        }
+        private readonly List<Material> materials = [];
 
         public void AddMaterial(string matlPath)
         {
@@ -27,7 +23,7 @@ namespace Blue_Sky
 
             override public string ToString()
             {
-                return matlPath; 
+                return matlPath;
             }
         }
 
