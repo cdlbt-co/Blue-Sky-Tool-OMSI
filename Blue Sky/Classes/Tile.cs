@@ -5,14 +5,14 @@ namespace Blue_Sky.Classes
 {
     internal class Tile(string fileName)
     {
-        public string fileName = fileName;
-        public bool isMissing = false;
+        public string fileName { get; set; } = fileName;
+        public bool isMissing { get; set; } = false;
 
         private readonly HashSet<string> readObjects = new(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> readSplines = new(StringComparer.OrdinalIgnoreCase);
 
-        private readonly List<string> objects = [];
-        private readonly List<string> splines = [];
+        public List<string> objects { get; } = [];
+        public List<string> splines { get; } = [];
 
         public bool AddObject(Sceneryobject sceneryobject)
         {

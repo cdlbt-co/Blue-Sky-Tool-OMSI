@@ -4,8 +4,10 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace Blue_Sky
@@ -15,7 +17,7 @@ namespace Blue_Sky
     /// </summary>
     public partial class MainWindow : Window
     {
-        Map map;
+        private Map map;
 
         public MainWindow()
         {
@@ -196,6 +198,9 @@ namespace Blue_Sky
 
                     MapReader.ReadHumans(map);
 
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Collecting Data..."));
+
                     // Lists to store file locations
                     List<string> tiles = map.GetTilePaths();
                     List<string> tilesMissing = map.GetMissingTilePaths();
@@ -207,9 +212,6 @@ namespace Blue_Sky
                     List<string> aicarsMissing = map.GetMissingVehiclePaths();
                     List<string> humans = map.GetHumanPaths();
                     List<string> humansMissing = map.GetMissingHumanPaths();
-
-                    // Status update
-                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Collecting Data..."));
 
                     // Sort data and output to textboxes
                     /* No need to sort tiles for easy reference to global.cfg */
@@ -227,8 +229,8 @@ namespace Blue_Sky
                     this.Dispatcher.Invoke((Action)(() =>
                     {
                         // Use string.join to build one string instead of old foreach loops
-                        txtTilesList.Text = String.Join("\r\n", tiles);
-                        txtTilesMissingList.Text = String.Join("\r\n", tilesMissing);
+                        lvTilesList.ItemsSource = map.tiles;
+                        lvTilesMissingList.ItemsSource = map.tiles.FindAll(Tile.IsTileMissing);
                         txtObjectsList.Text = String.Join("\r\n", objects);
                         txtObjectsMissingList.Text = String.Join("\r\n", objectsMissing);
                         txtSplinesList.Text = String.Join("\r\n", splines);
@@ -258,7 +260,7 @@ namespace Blue_Sky
                         // Try to read map picture
                         try
                         {
-                            imgMap.Source = new BitmapImage(new Uri(Directory.GetParent(pickMapFile.FileName) + "\\picture.jpg"));
+                            imgMap.Source = new BitmapImage(new Uri($"{map.folderPath}\\picture.jpg"));
                         }
                         catch (FileNotFoundException)
                         {
@@ -271,6 +273,37 @@ namespace Blue_Sky
                     }));
                 });
             }
+        }
+
+        private void ListView_UpdateColumnWidth(object sender, RoutedEventArgs e)
+        {
+            ListView lv = sender as ListView;
+            GridView gv = lv.View as GridView;
+
+            double availableWidth = lv.ActualWidth - SystemParameters.VerticalScrollBarWidth;
+
+            int columns = gv.Columns.Count;
+            for (int i = 1; i < columns; i++)
+            {
+                availableWidth -= gv.Columns[i].Width;
+            }
+
+            gv.Columns[0].Width = availableWidth;
+        }
+
+        private void lvTilesList_ClickExplore(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void lvTilesList_ClickObjects(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void lvTilesList_ClickSplines(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void tabMap_Clear()
@@ -319,6 +352,11 @@ namespace Blue_Sky
             txtLogFileInfo.Clear();
             txtLogFileWarn.Clear();
             txtLogFileError.Clear();
+        }
+
+        private void lvTilesList_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }
