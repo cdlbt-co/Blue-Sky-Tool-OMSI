@@ -31,7 +31,6 @@ namespace Blue_Sky.Classes
             if (newEntry) this.tiles.Add(tile);
             return newEntry;
         }
-
         public bool AddObject(Sceneryobject sceneryobject)
         {
             bool exists = readObjects.Add(sceneryobject.fileName);
@@ -39,7 +38,6 @@ namespace Blue_Sky.Classes
                 this.objects.Add(sceneryobject);
             return exists;
         }
-
         public bool AddSpline(Spline spline)
         {
             bool exists = readSplines.Add(spline.fileName);
@@ -47,17 +45,15 @@ namespace Blue_Sky.Classes
                 this.splines.Add(spline);
             return exists;
         }
-
         public bool AddVehicle(Vehicle vehicle)
         {
-            bool newEntry = readVehicles.Add(vehicle.path);
+            bool newEntry = readVehicles.Add(vehicle.fileName);
             if (newEntry) this.vehicles.Add(vehicle);
             return newEntry;
         }
-
         public bool AddHuman(Human human)
         {
-            bool newEntry = readHumans.Add(human.path);
+            bool newEntry = readHumans.Add(human.fileName);
             if (newEntry) this.humans.Add(human);
             return newEntry;
         }
@@ -66,17 +62,14 @@ namespace Blue_Sky.Classes
         {
             return [.. tiles.Select(x => x.fileName)];
         }
-
         public List<string> GetMissingTilePaths()
         {
             return [.. tiles.FindAll(Tile.IsTileMissing).Select(x => x.fileName)];
         }
-
         public List<string> GetObjectPaths()
         {
             return [.. objects.Select(x => x.fileName)];
         }
-
         public List<string> GetMissingObjectPaths()
         {
             return [.. objects.FindAll(Sceneryobject.IsObjectMissing).Select(x => x.fileName)];
@@ -85,10 +78,25 @@ namespace Blue_Sky.Classes
         {
             return [.. splines.Select(x => x.fileName)];
         }
-
         public List<string> GetMissingSplinesPaths()
         {
             return [.. splines.FindAll(Spline.IsSplineMissing).Select(x => x.fileName)];
+        }
+        public List<string> GetVehiclePaths()
+        {
+            return [.. vehicles.Select(x => x.fileName)];
+        }
+        public List<string> GetMissingVehiclePaths()
+        {
+            return [.. vehicles.FindAll(Vehicle.IsVehicleMissing).Select(x => x.fileName)];
+        }
+        public List<string> GetHumanPaths()
+        {
+            return [.. humans.Select(x => x.fileName)];
+        }
+        public List<string> GetMissingHumanPaths()
+        {
+            return [.. humans.FindAll(Human.IsHumanMissing).Select(x => x.fileName)];
         }
     }
 }

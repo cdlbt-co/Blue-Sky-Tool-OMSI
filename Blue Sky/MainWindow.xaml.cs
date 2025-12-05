@@ -4,7 +4,6 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -159,10 +158,7 @@ namespace Blue_Sky
                 txtMapDir.Text = pickMapFile.FileName;
 
                 // Show map load screen
-                MapLoadScreen m = new()
-                {
-                    Topmost = true
-                };
+                MapLoadScreen m = new() { Topmost = true };
                 m.Show();
                 BlueSkyWindow.IsEnabled = false;
 
@@ -185,6 +181,21 @@ namespace Blue_Sky
                     // Read tiles for objects and splines
                     TileReader.ReadAllTiles(map);
 
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading ailist.txt..."));
+
+                    MapReader.ReadAilist(map);
+
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading parklist_p.txt..."));
+
+                    MapReader.ReadParklist(map);
+
+                    // Status update
+                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading humans.txt, drivers.txt..."));
+
+                    MapReader.ReadHumans(map);
+
                     // Lists to store file locations
                     List<string> tiles = map.GetTilePaths();
                     List<string> tilesMissing = map.GetMissingTilePaths();
@@ -192,116 +203,10 @@ namespace Blue_Sky
                     List<string> objectsMissing = map.GetMissingObjectPaths();
                     List<string> splines = map.GetSplinePaths();
                     List<string> splinesMissing = map.GetMissingSplinesPaths();
-                    List<string> aicars = [];
-                    List<string> aicarsMissing = [];
-                    List<string> humans = [];
-                    List<string> humansMissing = [];
-
-                    // Status update
-                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading ailist.txt..."));
-
-                    // Scan ai list
-                    if (File.Exists(Directory.GetParent(pickMapFile.FileName) + "\\ailists.cfg"))
-                    {
-                        string[] aiList = File.ReadAllLines(Directory.GetParent(pickMapFile.FileName) + "\\ailists.cfg");
-                        for (int i = 0; i < aiList.Length; i++)
-                        {
-                            // Omsi1 ailist
-                            if ((aiList[i].StartsWith("[ailist]") && (i + 3) < aiList.Length))
-                            {
-                                int.TryParse(aiList[i + 3], out int length);
-                                i += 4;
-
-                                for (int j = 0; j < length && i + length < aiList.Length; j++)
-                                {
-                                    if (!aicars.Contains(aiList[i + j]))
-                                    {
-                                        aicars.Add(aiList[i + j]);
-                                        if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + aiList[i + j]))
-                                        {
-                                            aicarsMissing.Add(aiList[i + j]);
-                                        }
-                                    }
-                                }
-                                i += length;
-                            }
-
-                            // Omsi2 ailist
-                            if ((aiList[i].StartsWith("[aigroup_2]") && (i + 2) < aiList.Length))
-                            {
-                                for (i += 3; i < aiList.Length && !aiList[i].StartsWith("[end]"); i++)
-                                {
-                                    if (!aicars.Contains(aiList[i].Split('\t')[0]))
-                                    {
-                                        aicars.Add(aiList[i].Split('\t')[0]);
-                                        if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + aiList[i].Split('\t')[0]))
-                                        {
-                                            aicarsMissing.Add(aiList[i].Split('\t')[0]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // Status update
-                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading parklist_p.txt..."));
-
-                    // Scan park list
-                    String[] parklists = Directory.EnumerateFiles(Directory.GetParent(pickMapFile.FileName).ToString(), "*.txt", SearchOption.TopDirectoryOnly).Select(System.IO.Path.GetFileName).Where(f => f.StartsWith("parklist_p")).ToArray();
-
-                    foreach (string parklist in parklists)
-                    {
-                        string[] parkcars = File.ReadAllLines(Directory.GetParent(pickMapFile.FileName) + "\\" + parklist);
-                        foreach (string car in parkcars)
-                        {
-                            if (!objects.Contains(car))
-                            {
-                                objects.Add(car);
-                                if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + car))
-                                {
-                                    objectsMissing.Add(car);
-                                }
-                            }
-                        }
-                    }
-
-                    // Status update
-                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading humans.txt..."));
-
-                    // Scan humans
-                    if (File.Exists(Directory.GetParent(pickMapFile.FileName) + "\\humans.txt"))
-                    {
-                        string[] humanlist = File.ReadAllLines(Directory.GetParent(pickMapFile.FileName) + "\\humans.txt");
-                        foreach (string human in humanlist)
-                        {
-                            if (!humans.Contains(human))
-                            {
-                                humans.Add(human);
-                                if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + human))
-                                {
-                                    humansMissing.Add(human);
-                                }
-                            }
-                        }
-                    }
-
-                    // Scan drivers
-                    if (File.Exists(Directory.GetParent(pickMapFile.FileName) + "\\drivers.txt"))
-                    {
-                        string[] driverlist = File.ReadAllLines(Directory.GetParent(pickMapFile.FileName) + "\\drivers.txt");
-                        foreach (string driver in driverlist)
-                        {
-                            if (!humans.Contains(driver))
-                            {
-                                humans.Add(driver);
-                                if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + driver))
-                                {
-                                    humansMissing.Add(driver);
-                                }
-                            }
-                        }
-                    }
+                    List<string> aicars = map.GetVehiclePaths();
+                    List<string> aicarsMissing = map.GetMissingVehiclePaths();
+                    List<string> humans = map.GetHumanPaths();
+                    List<string> humansMissing = map.GetMissingHumanPaths();
 
                     // Status update
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Collecting Data..."));

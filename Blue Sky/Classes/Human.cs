@@ -1,8 +1,13 @@
 ﻿namespace Blue_Sky.Classes
 {
-    internal class Human(string path)
+    internal class Human(string fileName)
     {
-        public string path = path;
+        public string fileName = fileName;
         public bool isMissing = false;
+
+        public static bool IsHumanMissing(Human human)
+        {
+            return human.isMissing;
+        }
     }
 }
