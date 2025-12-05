@@ -1,37 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Blue_Sky.Classes
 {
-    internal class Tile(string path)
+    internal class Tile(string fileName)
     {
-        public string path = path;
+        public string fileName = fileName;
         public bool isMissing = false;
 
-        private HashSet<Sceneryobject> readObjects = [];
-        private HashSet<Spline> readSplines = [];
+        private readonly HashSet<string> readObjects = new(StringComparer.OrdinalIgnoreCase);
+        private readonly HashSet<string> readSplines = new(StringComparer.OrdinalIgnoreCase);
 
-        public List<Sceneryobject> objects = [];
-        public List<Spline> splines = [];
+        private readonly List<string> objects = [];
+        private readonly List<string> splines = [];
 
         public bool AddObject(Sceneryobject sceneryobject)
         {
-            bool exists = readObjects.Add(sceneryobject);
+            bool exists = readObjects.Add(sceneryobject.fileName);
             if (exists)
-                this.objects.Add(sceneryobject);
+                this.objects.Add(sceneryobject.fileName);
             return exists;
         }
 
         public bool AddSpline(Spline spline)
         {
-            bool exists = readSplines.Add(spline);
+            bool exists = readSplines.Add(spline.fileName);
             if (exists)
-                this.splines.Add(spline);
+                this.splines.Add(spline.fileName);
             return exists;
         }
 
-        public static bool MissingTile(Tile tile)
+        public static bool IsTileMissing(Tile tile)
         {
             return tile.isMissing;
+        }
+        public override bool Equals(object obj)
+        {
+            Tile tile2 = obj as Tile;
+            if (tile2 == null) return false;
+            return this.fileName == (obj as Tile).fileName;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.fileName.GetHashCode();
         }
     }
 }

@@ -1,14 +1,13 @@
-﻿using System.IO;
+﻿using Blue_Sky.Classes;
+using System.IO;
 
-namespace Blue_Sky.Classes
+namespace Blue_Sky.Readers
 {
     internal static class MapReader
     {
-        public static Map ReadMap(string mapPath)
+        public static void ReadMap(Map map)
         {
-            string[] mapFile = File.ReadAllLines(mapPath);
-
-            Map map = new();
+            string[] mapFile = File.ReadAllLines(map.globalcfgPath);
 
             // Read map file
             for (int i = 0; i < mapFile.Length; i++)
@@ -37,14 +36,13 @@ namespace Blue_Sky.Classes
                     Tile newTile = new(tilePath);
 
                     // Check if tile missing
-                    if (!File.Exists(Directory.GetParent(mapPath) + "\\" + tilePath))
+                    if (!File.Exists($"{map.folderPath}\\{tilePath}"))
                         newTile.isMissing = true;
 
                     map.AddTile(newTile);
                     i += 3;
                 }
             }
-            return map;
         }
     }
 }

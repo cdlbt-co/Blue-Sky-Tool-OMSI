@@ -1,4 +1,5 @@
 ﻿using Blue_Sky.Classes;
+using Blue_Sky.Readers;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -170,73 +171,36 @@ namespace Blue_Sky
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading global.cfg..."));
 
                     // Read map info
-                    map = MapReader.ReadMap(pickMapFile.FileName);
+                    map = new(pickMapFile.FileName);
+                    MapReader.ReadMap(map);
 
+                    // Status update
                     this.Dispatcher.Invoke((Action)(() =>
                     {
                         txtMapName.Text = map.name;
                         txtMapDescription.Text = map.description;
+                        m.lblLoading.Content = "Reading tiles ...";
                     }));
+
+                    // Read tiles for objects and splines
+                    TileReader.ReadAllTiles(map);
 
                     // Lists to store file locations
                     List<string> tiles = map.GetTilePaths();
                     List<string> tilesMissing = map.GetMissingTilePaths();
-                    List<string> objects = [];
-                    List<string> objectsMissing = [];
-                    List<string> splines = [];
-                    List<string> splinesMissing = [];
+                    List<string> objects = map.GetObjectPaths();
+                    List<string> objectsMissing = map.GetMissingObjectPaths();
+                    List<string> splines = map.GetSplinePaths();
+                    List<string> splinesMissing = map.GetMissingSplinesPaths();
                     List<string> aicars = [];
                     List<string> aicarsMissing = [];
                     List<string> humans = [];
                     List<string> humansMissing = [];
 
                     // Status update
-                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading tiles ..."));
-
-                    // Scan tiles for objects and splines
-                    for (int t = 0; t < tiles.Count; t++)
-                    {
-                        /* removed tile by tile status update to speed things up */
-
-                        if (File.Exists(Directory.GetParent(pickMapFile.FileName) + "\\" + tiles[t]))
-                        {
-                            string[] tileFile = File.ReadAllLines(Directory.GetParent(pickMapFile.FileName) + "\\" + tiles[t]);
-                            for (int i = 0; i < tileFile.Length; i++)
-                            {
-                                // Read for objects
-                                if ((tileFile[i].StartsWith("[object]") || tileFile[i].StartsWith("[splineAttachement]") || tileFile[i].StartsWith("[attachObj]")) && (i + 2) < tileFile.Length)
-                                {
-                                    if (!objects.Contains(tileFile[i + 2]))
-                                    {
-                                        objects.Add(tileFile[i + 2]);
-                                        if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + tileFile[i + 2]))
-                                        {
-                                            objectsMissing.Add(tileFile[i + 2]);
-                                        }
-                                    }
-                                }
-
-                                // Read for splines
-                                if ((tileFile[i].StartsWith("[spline]") || tileFile[i].StartsWith("[spline_h]")) && (i + 2) < tileFile.Length)
-                                {
-                                    if (!splines.Contains(tileFile[i + 2]))
-                                    {
-                                        splines.Add(tileFile[i + 2]);
-                                        if (!File.Exists(Directory.GetParent(Directory.GetParent(Directory.GetParent(pickMapFile.FileName).FullName).FullName) + "\\" + tileFile[i + 2]))
-                                        {
-                                            splinesMissing.Add(tileFile[i + 2]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // Status update
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading ailist.txt..."));
 
                     // Scan ai list
-
                     if (File.Exists(Directory.GetParent(pickMapFile.FileName) + "\\ailists.cfg"))
                     {
                         string[] aiList = File.ReadAllLines(Directory.GetParent(pickMapFile.FileName) + "\\ailists.cfg");

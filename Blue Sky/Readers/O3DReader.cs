@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Blue_Sky.Classes;
+using System;
 using System.IO;
 using System.Text;
 
-namespace Blue_Sky.Classes
+namespace Blue_Sky.Readers
 {
     internal static class O3DReader
     {
