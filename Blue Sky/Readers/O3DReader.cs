@@ -19,7 +19,7 @@ namespace Blue_Sky.Readers
                 return null;
             }
 
-            O3D o3d = new();
+            O3D o3d = new(filepath);
 
             // Check valid o3d
             if (o3dBytes[0] != 0x84 || o3dBytes[1] != 0x19)

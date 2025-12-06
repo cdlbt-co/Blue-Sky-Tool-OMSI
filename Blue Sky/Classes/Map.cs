@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Blue_Sky.Classes
 {
-    internal class Map(string globalcfgPath)
+    public class Map(string globalcfgPath)
     {
         public string globalcfgPath = globalcfgPath;
         public string folderPath = FolderHelper.GetParent(globalcfgPath);

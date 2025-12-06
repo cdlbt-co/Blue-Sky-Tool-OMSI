@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Blue_Sky.Classes
 {
-    internal class Tile(string fileName)
+    public class Tile(string fileName)
     {
         public string fileName { get; set; } = fileName;
         public bool isMissing { get; set; } = false;

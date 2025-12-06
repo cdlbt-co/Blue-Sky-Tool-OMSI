@@ -1,6 +1,6 @@
 ﻿namespace Blue_Sky.Classes
 {
-    internal class Vehicle(string fileName)
+    public class Vehicle(string fileName)
     {
         public string fileName = fileName;
         public bool isMissing = false;

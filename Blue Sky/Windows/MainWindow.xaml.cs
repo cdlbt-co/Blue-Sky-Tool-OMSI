@@ -1,10 +1,11 @@
 ﻿using Blue_Sky.Classes;
 using Blue_Sky.Readers;
+using Blue_Sky.Windows;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +14,7 @@ using System.Windows.Media.Imaging;
 namespace Blue_Sky
 {
     /// <summary>
-    /// MainWindow.xaml 的互動邏輯
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -152,10 +153,6 @@ namespace Blue_Sky
             {
                 // Clear everything
                 tabMap_Clear();
-                tabObjects_Clear();
-                tabSplines_Clear();
-                tabAicars_Clear();
-                tabHumans_Clear();
 
                 txtMapDir.Text = pickMapFile.FileName;
 
@@ -231,8 +228,8 @@ namespace Blue_Sky
                         // Use string.join to build one string instead of old foreach loops
                         lvTilesList.ItemsSource = map.tiles;
                         lvTilesMissingList.ItemsSource = map.tiles.FindAll(Tile.IsTileMissing);
-                        txtObjectsList.Text = String.Join("\r\n", objects);
-                        txtObjectsMissingList.Text = String.Join("\r\n", objectsMissing);
+                        lvObjectsList.ItemsSource = map.objects;
+                        lvObjectsMissingList.ItemsSource = map.objects.FindAll(Sceneryobject.IsObjectMissing);
                         txtSplinesList.Text = String.Join("\r\n", splines);
                         txtSplinesMissingList.Text = String.Join("\r\n", splinesMissing);
                         txtAicarsList.Text = String.Join("\r\n", aicars);
@@ -291,19 +288,51 @@ namespace Blue_Sky
             gv.Columns[0].Width = availableWidth;
         }
 
+        private void ShowFileInFolder(string filePath)
+        {
+            try
+            {
+                if (!File.Exists(filePath))
+                {
+                    MessageBox.Show($"File not found: {filePath}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "explorer.exe",
+                    Arguments = $"/select,\"{filePath}\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not open Explorer.\n\n{ex.Message}", "Error",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void lvTilesList_ClickExplore(object sender, RoutedEventArgs e)
         {
-
+            ShowFileInFolder($"{map.folderPath}\\{((sender as MenuItem).DataContext as Tile).fileName}");
         }
 
-        private void lvTilesList_ClickObjects(object sender, RoutedEventArgs e)
+        private void lvTilesList_ClickDetail(object sender, RoutedEventArgs e)
         {
-
+            TileDetailWindow tw = new((sender as MenuItem).DataContext as Tile);
+            tw.Show();
         }
 
-        private void lvTilesList_ClickSplines(object sender, RoutedEventArgs e)
+        private void lvObjectsList_ClickExplore(object sender, RoutedEventArgs e)
         {
+            ShowFileInFolder($"{map.folderPath}\\{((sender as MenuItem).DataContext as Sceneryobject).fileName}");
+        }
 
+        private void lvObjectsList_ClickDetail(object sender, RoutedEventArgs e)
+        {
+            //ObjectDetailWindow tw = new((sender as MenuItem).DataContext as Sceneryobject);
+            //tw.Show();
         }
 
         private void tabMap_Clear()
@@ -323,27 +352,6 @@ namespace Blue_Sky
             txtMapDescription.Clear();
         }
 
-        private void tabObjects_Clear()
-        {
-            txtObjectsList.Clear();
-            txtObjectsMissingList.Clear();
-        }
-
-        private void tabSplines_Clear()
-        {
-            txtSplinesList.Clear();
-            txtSplinesMissingList.Clear();
-        }
-        private void tabAicars_Clear()
-        {
-            txtAicarsList.Clear();
-            txtAicarsMissingList.Clear();
-        }
-        private void tabHumans_Clear()
-        {
-            txtHumansList.Clear();
-            txtHumansMissingList.Clear();
-        }
         private void tabLogFile_Clear()
         {
             txtLogFileDir.Clear();

@@ -1,6 +1,6 @@
 ﻿namespace Blue_Sky.Classes
 {
-    internal class Spline(string filePath)
+    public class Spline(string filePath)
     {
         public string fileName = filePath;
         public bool isMissing = false;
