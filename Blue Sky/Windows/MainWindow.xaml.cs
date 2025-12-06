@@ -100,48 +100,6 @@ namespace Blue_Sky
             }
         }
 
-
-        private void btno3d_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog picko3dFile = new OpenFileDialog
-            {
-                Filter = "OMSI 3D File|*.o3d|All files|*.*",
-                InitialDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\OMSI 2"
-            };
-
-            if (picko3dFile.ShowDialog() == true)
-            {
-                //tabLogFile_Clear();
-                txto3dFileDir.Text = picko3dFile.FileName;
-
-                // Show map load screen
-                MapLoadScreen m = new()
-                {
-                    Topmost = true
-                };
-                m.Show();
-                BlueSkyWindow.IsEnabled = false;
-
-                Task task = Task.Factory.StartNew(() =>
-                {
-                    this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading o3d..."));
-
-                    O3D o3d = O3DReader.ReadO3D(picko3dFile.FileName);
-
-                    this.Dispatcher.Invoke((Action)(() =>
-                    {
-                        m.lblLoading.Content = "Collecting Data...";
-
-                        if (o3d != null) txto3dFileInfo.Text = String.Join("\r\n", o3d.GetMaterialPathList());
-
-                        // Re-enable main window and close loading screen
-                        BlueSkyWindow.IsEnabled = true;
-                        m.Close();
-                    }));
-                });
-            }
-        }
-
         private void btnMap_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog pickMapFile = new OpenFileDialog();
@@ -198,28 +156,17 @@ namespace Blue_Sky
                     // Status update
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Collecting Data..."));
 
-                    // Lists to store file locations
-                    List<string> tiles = map.GetTilePaths();
-                    List<string> tilesMissing = map.GetMissingTilePaths();
-                    List<string> objects = map.GetObjectPaths();
-                    List<string> objectsMissing = map.GetMissingObjectPaths();
-                    List<string> splines = map.GetSplinePaths();
-                    List<string> splinesMissing = map.GetMissingSplinesPaths();
-                    List<string> aicars = map.GetVehiclePaths();
-                    List<string> aicarsMissing = map.GetMissingVehiclePaths();
-                    List<string> humans = map.GetHumanPaths();
-                    List<string> humansMissing = map.GetMissingHumanPaths();
-
                     // Sort data and output to textboxes
-                    /* No need to sort tiles for easy reference to global.cfg */
-                    objects.Sort();
-                    objectsMissing.Sort();
-                    splines.Sort();
-                    splinesMissing.Sort();
-                    aicars.Sort();
-                    aicarsMissing.Sort();
-                    humans.Sort();
-                    humansMissing.Sort();
+                    map.objects.Sort();
+                    map.splines.Sort();
+                    map.vehicles.Sort();
+                    map.humans.Sort();
+
+                    List<Tile> tilesMissing = map.tiles.FindAll(Tile.IsTileMissing);
+                    List<Sceneryobject> objectsMissing = map.objects.FindAll(Sceneryobject.IsObjectMissing);
+                    List<Spline> splinesMissing = map.splines.FindAll(Spline.IsSplineMissing);
+                    List<Vehicle> vehiclesMissing = map.vehicles.FindAll(Vehicle.IsVehicleMissing);
+                    List<Human> humansMissing = map.humans.FindAll(Human.IsHumanMissing);
 
                     // Use dispatch invoke to print list to textboxes
                     // Output final data to first page
@@ -227,31 +174,31 @@ namespace Blue_Sky
                     {
                         // Use string.join to build one string instead of old foreach loops
                         lvTilesList.ItemsSource = map.tiles;
-                        lvTilesMissingList.ItemsSource = map.tiles.FindAll(Tile.IsTileMissing);
+                        lvTilesMissingList.ItemsSource = tilesMissing;
                         lvObjectsList.ItemsSource = map.objects;
-                        lvObjectsMissingList.ItemsSource = map.objects.FindAll(Sceneryobject.IsObjectMissing);
-                        txtSplinesList.Text = String.Join("\r\n", splines);
-                        txtSplinesMissingList.Text = String.Join("\r\n", splinesMissing);
-                        txtAicarsList.Text = String.Join("\r\n", aicars);
-                        txtAicarsMissingList.Text = String.Join("\r\n", aicarsMissing);
-                        txtHumansList.Text = String.Join("\r\n", humans);
-                        txtHumansMissingList.Text = String.Join("\r\n", humansMissing);
+                        lvObjectsMissingList.ItemsSource = objectsMissing;
+                        lvSplinesList.ItemsSource = map.splines;
+                        lvSplinesMissingList.ItemsSource = splinesMissing;
+                        lvVehiclesList.ItemsSource = map.vehicles;
+                        lvVehiclesMissingList.ItemsSource = vehiclesMissing;
+                        lvHumansList.ItemsSource = map.humans;
+                        lvHumansMissingList.ItemsSource = humansMissing;
 
                         // Count objects and splines after reading map file
-                        txtMapTileCount.Text = tiles.Count.ToString();
-                        txtMapTileMissing.Text = tilesMissing.Count.ToString();
+                        txtMapTileCount.Text = $"{map.tiles.Count}";
+                        txtMapTileMissing.Text = $"{tilesMissing.Count}";
                         tabTiles.Header = $"Tiles ({tilesMissing.Count})";
-                        txtMapObjectCount.Text = objects.Count.ToString();
-                        txtMapObjectMissing.Text = objectsMissing.Count.ToString();
+                        txtMapObjectCount.Text = $"{map.objects.Count}";
+                        txtMapObjectMissing.Text = $"{objectsMissing.Count}";
                         tabObjects.Header = $"Objects ({objectsMissing.Count})";
-                        txtMapSplineCount.Text = splines.Count.ToString();
-                        txtMapSplineMissing.Text = splinesMissing.Count.ToString();
+                        txtMapSplineCount.Text = $"{map.splines.Count}";
+                        txtMapSplineMissing.Text = $"{splinesMissing.Count}";
                         tabSplines.Header = $"Splines ({splinesMissing.Count})";
-                        txtMapAicarCount.Text = aicars.Count.ToString();
-                        txtMapAicarMissing.Text = aicarsMissing.Count.ToString();
-                        tabAicar.Header = $"AI Vehicles ({aicarsMissing.Count})";
-                        txtMapHumanCount.Text = humans.Count.ToString();
-                        txtMapHumanMissing.Text = humansMissing.Count.ToString();
+                        txtMapAicarCount.Text = $"{map.vehicles.Count}";
+                        txtMapAicarMissing.Text = $"{vehiclesMissing.Count}";
+                        tabAicar.Header = $"AI Vehicles ({vehiclesMissing.Count})";
+                        txtMapHumanCount.Text = $"{map.humans.Count}";
+                        txtMapHumanMissing.Text = $"{humansMissing.Count}";
                         tabHuman.Header = $"Humans ({humansMissing.Count})";
 
                         // Try to read map picture
@@ -288,7 +235,7 @@ namespace Blue_Sky
             gv.Columns[0].Width = availableWidth;
         }
 
-        private void ShowFileInFolder(string filePath)
+        private static void ShowFileInFolder(string filePath)
         {
             try
             {
@@ -326,13 +273,30 @@ namespace Blue_Sky
 
         private void lvObjectsList_ClickExplore(object sender, RoutedEventArgs e)
         {
-            ShowFileInFolder($"{map.folderPath}\\{((sender as MenuItem).DataContext as Sceneryobject).fileName}");
+            ShowFileInFolder($"{map.omsiPath}\\{((sender as MenuItem).DataContext as Sceneryobject).fileName}");
         }
 
         private void lvObjectsList_ClickDetail(object sender, RoutedEventArgs e)
         {
-            //ObjectDetailWindow tw = new((sender as MenuItem).DataContext as Sceneryobject);
-            //tw.Show();
+        }
+
+        private void lvSplinesList_ClickExplore(object sender, RoutedEventArgs e)
+        {
+            ShowFileInFolder($"{map.omsiPath}\\{((sender as MenuItem).DataContext as Spline).fileName}");
+        }
+
+        private void lvSplinesList_ClickDetail(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void lvVehiclesList_ClickExplore(object sender, RoutedEventArgs e)
+        {
+            ShowFileInFolder($"{map.omsiPath}\\{((sender as MenuItem).DataContext as Vehicle).fileName}");
+        }
+
+        private void lvHumansList_ClickExplore(object sender, RoutedEventArgs e)
+        {
+            ShowFileInFolder($"{map.omsiPath}\\{((sender as MenuItem).DataContext as Human).fileName}");
         }
 
         private void tabMap_Clear()

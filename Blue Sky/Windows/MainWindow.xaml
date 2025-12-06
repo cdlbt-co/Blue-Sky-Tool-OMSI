@@ -371,7 +371,7 @@
                         <Label Margin="4,0"
                                VerticalAlignment="Bottom"
                                Grid.Row="0"
-                               Content="All tiles:" />
+                               Content="All Objects:" />
                         <ListView BorderBrush="{DynamicResource TextControlElevationBorderBrush}"
                                   Grid.Row="1"
                                   SelectionMode="Single"
@@ -388,8 +388,8 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="o3d"
-                                                    Width="48">
+                                    <GridViewColumn Header="Models"
+                                                    Width="72">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock TextAlignment="Center"
@@ -462,7 +462,7 @@
                         <Label Margin="4,0"
                                VerticalAlignment="Bottom"
                                Grid.Row="0"
-                               Content="Missing tiles:" />
+                               Content="Missing Objects:" />
                         <ListView  BorderBrush="{DynamicResource TextControlElevationBorderBrush}"
                                    Grid.Row="1"
                                    SelectionMode="Single"
@@ -532,14 +532,78 @@
                         <Label Margin="4,0"
                                VerticalAlignment="Bottom"
                                Grid.Row="0"
-                               Content="All splines:" />
-                        <TextBox Margin="4,0,4,4"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Grid.Row="1"
-                                 FontFamily="Courier New"
-                                 IsReadOnly="True"
-                                 x:Name="txtSplinesList" />
+                               Content="All Splines:" />
+                        <ListView BorderBrush="{DynamicResource TextControlElevationBorderBrush}"
+                                  Grid.Row="1"
+                                  SelectionMode="Single"
+                                  HorizontalAlignment="Stretch"
+                                  SizeChanged="ListView_UpdateColumnWidth"
+                                  Name="lvSplinesList">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="File Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontFamily="Courier New"
+                                                           Text="{Binding fileName}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Textures"
+                                                    Width="76">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock TextAlignment="Center"
+                                                           Text="{Binding textures.Count}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.Resources>
+                                <ContextMenu x:Key="lvSplinesListMenu">
+                                    <MenuItem Header="Show in File Explorer"
+                                              Click="lvSplinesList_ClickExplore" />
+                                    <MenuItem Header="View Details"
+                                              Click="lvSplinesList_ClickDetail" />
+                                </ContextMenu>
+                            </ListView.Resources>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                    <Setter Property="ContextMenu"
+                                            Value="{StaticResource lvSplinesListMenu}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding isMissing}"
+                                                     Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource AccentTextFillColorTertiaryBrush}" />
+                                        </DataTrigger>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource ControlElevationBorderBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorSelectedTextBackgroundBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
                     </Grid>
                     <Grid Margin="4"
                           Grid.Column="1">
@@ -550,14 +614,56 @@
                         <Label Margin="4,0"
                                VerticalAlignment="Bottom"
                                Grid.Row="0"
-                               Content="Missing splines:" />
-                        <TextBox Margin="4,0,4,4"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Grid.Row="1"
-                                 FontFamily="Courier New"
-                                 IsReadOnly="True"
-                                 x:Name="txtSplinesMissingList" />
+                               Content="Missing Splines:" />
+                        <ListView  BorderBrush="{DynamicResource TextControlElevationBorderBrush}"
+                                   Grid.Row="1"
+                                   SelectionMode="Single"
+                                   HorizontalAlignment="Stretch"
+                                   SizeChanged="ListView_UpdateColumnWidth"
+                                   Name="lvSplinesMissingList">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="File Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontFamily="Courier New"
+                                                           Text="{Binding fileName}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                    <Setter Property="Foreground"
+                                            Value="{DynamicResource AccentTextFillColorTertiaryBrush}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource ControlElevationBorderBrush}" />
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorSelectedTextBackgroundBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -578,14 +684,67 @@
                         <Label Margin="4,0"
                                VerticalAlignment="Bottom"
                                Grid.Row="0"
-                               Content="All AI vehicles:" />
-                        <TextBox Margin="4,0,4,4"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Grid.Row="1"
-                                 FontFamily="Courier New"
-                                 IsReadOnly="True"
-                                 x:Name="txtAicarsList" />
+                               Content="All Vehicles:" />
+                        <ListView BorderBrush="{DynamicResource TextControlElevationBorderBrush}"
+                                  Grid.Row="1"
+                                  SelectionMode="Single"
+                                  HorizontalAlignment="Stretch"
+                                  SizeChanged="ListView_UpdateColumnWidth"
+                                  Name="lvVehiclesList">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="File Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontFamily="Courier New"
+                                                           Text="{Binding fileName}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.Resources>
+                                <ContextMenu x:Key="lvVehiclesListMenu">
+                                    <MenuItem Header="Show in File Explorer"
+                                              Click="lvVehiclesList_ClickExplore" />
+                                </ContextMenu>
+                            </ListView.Resources>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                    <Setter Property="ContextMenu"
+                                            Value="{StaticResource lvVehiclesListMenu}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding isMissing}"
+                                                     Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource AccentTextFillColorTertiaryBrush}" />
+                                        </DataTrigger>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource ControlElevationBorderBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorSelectedTextBackgroundBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
                     </Grid>
                     <Grid Margin="4"
                           Grid.Column="1">
@@ -596,14 +755,56 @@
                         <Label Margin="4,0"
                                VerticalAlignment="Bottom"
                                Grid.Row="0"
-                               Content="Missing AI vehicles:" />
-                        <TextBox Margin="4,0,4,4"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Grid.Row="1"
-                                 FontFamily="Courier New"
-                                 IsReadOnly="True"
-                                 x:Name="txtAicarsMissingList" />
+                               Content="Missing Vehicles:" />
+                        <ListView  BorderBrush="{DynamicResource TextControlElevationBorderBrush}"
+                                   Grid.Row="1"
+                                   SelectionMode="Single"
+                                   HorizontalAlignment="Stretch"
+                                   SizeChanged="ListView_UpdateColumnWidth"
+                                   Name="lvVehiclesMissingList">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="File Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontFamily="Courier New"
+                                                           Text="{Binding fileName}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                    <Setter Property="Foreground"
+                                            Value="{DynamicResource AccentTextFillColorTertiaryBrush}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource ControlElevationBorderBrush}" />
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorSelectedTextBackgroundBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -624,14 +825,67 @@
                         <Label Margin="4,0"
                                VerticalAlignment="Bottom"
                                Grid.Row="0"
-                               Content="All humans:" />
-                        <TextBox Margin="4,0,4,4"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Grid.Row="1"
-                                 FontFamily="Courier New"
-                                 IsReadOnly="True"
-                                 x:Name="txtHumansList" />
+                               Content="All Humans:" />
+                        <ListView BorderBrush="{DynamicResource TextControlElevationBorderBrush}"
+                                  Grid.Row="1"
+                                  SelectionMode="Single"
+                                  HorizontalAlignment="Stretch"
+                                  SizeChanged="ListView_UpdateColumnWidth"
+                                  Name="lvHumansList">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="File Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontFamily="Courier New"
+                                                           Text="{Binding fileName}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.Resources>
+                                <ContextMenu x:Key="lvHumansListMenu">
+                                    <MenuItem Header="Show in File Explorer"
+                                              Click="lvHumansList_ClickExplore" />
+                                </ContextMenu>
+                            </ListView.Resources>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                    <Setter Property="ContextMenu"
+                                            Value="{StaticResource lvHumansListMenu}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding isMissing}"
+                                                     Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource AccentTextFillColorTertiaryBrush}" />
+                                        </DataTrigger>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource ControlElevationBorderBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorSelectedTextBackgroundBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
                     </Grid>
                     <Grid Margin="4"
                           Grid.Column="1">
@@ -642,14 +896,56 @@
                         <Label Margin="4,0"
                                VerticalAlignment="Bottom"
                                Grid.Row="0"
-                               Content="Missing humans:" />
-                        <TextBox Margin="4,0,4,4"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Grid.Row="1"
-                                 FontFamily="Courier New"
-                                 IsReadOnly="True"
-                                 x:Name="txtHumansMissingList" />
+                               Content="Missing Humans:" />
+                        <ListView  BorderBrush="{DynamicResource TextControlElevationBorderBrush}"
+                                   Grid.Row="1"
+                                   SelectionMode="Single"
+                                   HorizontalAlignment="Stretch"
+                                   SizeChanged="ListView_UpdateColumnWidth"
+                                   Name="lvHumansMissingList">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="File Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontFamily="Courier New"
+                                                           Text="{Binding fileName}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Stretch" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                    <Setter Property="Foreground"
+                                            Value="{DynamicResource AccentTextFillColorTertiaryBrush}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource ControlElevationBorderBrush}" />
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AccentFillColorSelectedTextBackgroundBrush}" />
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
+                                            <Setter Property="Foreground"
+                                                    Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -709,45 +1005,6 @@
                                      x:Name="txtLogFileError" />
                         </TabItem>
                     </TabControl>
-
-                </Grid>
-            </TabItem>
-            <TabItem Header="o3d"
-                     Padding="8,4">
-                <Grid VerticalAlignment="Stretch"
-                      HorizontalAlignment="Stretch"
-                      Margin="4">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <DockPanel HorizontalAlignment="Stretch"
-                               VerticalAlignment="Top"
-                               Grid.Row="0">
-                        <Button Content="Open o3d file..."
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Margin="4"
-                                Click="btno3d_Click"
-                                Style="{DynamicResource AccentButtonStyle}" />
-                        <TextBox HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Top"
-                                 Margin="4"
-                                 TextWrapping="NoWrap"
-                                 IsReadOnly="True"
-                                 x:Name="txto3dFileDir" />
-                    </DockPanel>
-                    <Grid HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          Grid.Row="1"
-                          Margin="4">
-                        <TextBox Padding="8,4"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 FontFamily="Courier New"
-                                 IsReadOnly="True"
-                                 x:Name="txto3dFileInfo" />
-                    </Grid>
 
                 </Grid>
             </TabItem>
