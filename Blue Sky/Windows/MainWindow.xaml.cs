@@ -139,6 +139,7 @@ namespace Blue_Sky
                     TileReader.ReadAllTiles(map);
                     ScoReader.ReadAllObjects(map);
                     O3DReader.ReadAllO3DTextures(map);
+                    SliReader.ReadAllSplinees(map);
 
                     // Status update
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading ailist.txt..."));
