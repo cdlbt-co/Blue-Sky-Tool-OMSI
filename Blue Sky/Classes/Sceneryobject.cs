@@ -1,29 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Blue_Sky.Classes
 {
-    public class Sceneryobject(string fileName) : IComparable<Sceneryobject>
+    public class Sceneryobject(string fileName, string path) : OmsiFile(fileName, path)
     {
-        public string fileName { get; set; } = fileName;
-        public bool isMissing { get; set; } = false;
+        private HashSet<string> readO3ds = [];
+        private HashSet<string> readTextures = [];
+        private HashSet<string> readScripts = [];
 
         public List<O3D> o3ds { get; } = [];
-        public List<string> textures { get; } = [];
+        public List<Texture> textures { get; } = [];
+        public List<Script> scripts { get; } = [];
 
-        public static bool IsObjectMissing(Sceneryobject sceneryobject)
+        public bool AddO3D(O3D o3d)
         {
-            return sceneryobject.isMissing;
+            bool exists = readO3ds.Add(o3d.fileName);
+            if (exists)
+                this.o3ds.Add(o3d);
+            return exists;
         }
 
-        public int CompareTo(Sceneryobject other)
+        public bool AddTexture(Texture matl)
         {
-            if (other is null) return 1;
+            bool exists = readTextures.Add(matl.fileName);
+            if (exists)
+                this.textures.Add(matl);
+            return exists;
+        }
 
-            return string.Compare(this.fileName,
-                other.fileName,
-                StringComparison.OrdinalIgnoreCase);
-
+        public bool AddScript(Script script)
+        {
+            bool exists = readScripts.Add(script.fileName);
+            if (exists)
+                this.scripts.Add(script);
+            return exists;
         }
     }
 }

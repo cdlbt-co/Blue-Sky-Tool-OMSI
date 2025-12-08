@@ -4,7 +4,7 @@ namespace Blue_Sky.Readers
 {
     internal static class FolderHelper
     {
-        public static string GetParent(string filePath, int level = 0)
+        public static string UpDir(string filePath, int level = 0)
         {
             string folderPath = filePath;
             for (int i = level; i >= 0; i--)

@@ -137,6 +137,8 @@ namespace Blue_Sky
 
                     // Read tiles for objects and splines
                     TileReader.ReadAllTiles(map);
+                    ScoReader.ReadAllObjects(map);
+                    O3DReader.ReadAllO3DTextures(map);
 
                     // Status update
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading ailist.txt..."));
@@ -162,11 +164,11 @@ namespace Blue_Sky
                     map.vehicles.Sort();
                     map.humans.Sort();
 
-                    List<Tile> tilesMissing = map.tiles.FindAll(Tile.IsTileMissing);
-                    List<Sceneryobject> objectsMissing = map.objects.FindAll(Sceneryobject.IsObjectMissing);
-                    List<Spline> splinesMissing = map.splines.FindAll(Spline.IsSplineMissing);
-                    List<Vehicle> vehiclesMissing = map.vehicles.FindAll(Vehicle.IsVehicleMissing);
-                    List<Human> humansMissing = map.humans.FindAll(Human.IsHumanMissing);
+                    List<Tile> tilesMissing = map.tiles.FindAll(OmsiFile.IsFileMissing);
+                    List<Sceneryobject> objectsMissing = map.objects.FindAll(OmsiFile.IsFileMissing);
+                    List<Spline> splinesMissing = map.splines.FindAll(OmsiFile.IsFileMissing);
+                    List<Vehicle> vehiclesMissing = map.vehicles.FindAll(OmsiFile.IsFileMissing);
+                    List<Human> humansMissing = map.humans.FindAll(OmsiFile.IsFileMissing);
 
                     // Use dispatch invoke to print list to textboxes
                     // Output final data to first page

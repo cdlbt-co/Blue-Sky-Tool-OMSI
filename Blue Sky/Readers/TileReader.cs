@@ -9,7 +9,7 @@ namespace Blue_Sky.Readers
         {
             foreach (Tile tile in map.tiles)
             {
-                ReadTile(map, tile);
+                if (!tile.isMissing) ReadTile(map, tile);
             }
         }
 
@@ -30,7 +30,7 @@ namespace Blue_Sky.Readers
                     (i + 2) < tileFile.Length)
                 {
                     string objectPath = tileFile[i + 2];
-                    Sceneryobject newObject = new(objectPath);
+                    Sceneryobject newObject = new(objectPath, map.omsiPath);
 
                     // Check if object missing
                     if (!File.Exists($"{map.omsiPath}\\{objectPath}"))
@@ -47,7 +47,7 @@ namespace Blue_Sky.Readers
                     (i + 2) < tileFile.Length)
                 {
                     string splinePath = tileFile[i + 2];
-                    Spline newSpline = new(splinePath);
+                    Spline newSpline = new(splinePath, map.omsiPath);
 
                     // Check if spline missing
                     if (!File.Exists($"{map.omsiPath}\\{splinePath}"))

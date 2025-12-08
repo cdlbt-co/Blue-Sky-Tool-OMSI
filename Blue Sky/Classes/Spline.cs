@@ -1,28 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Blue_Sky.Classes
 {
-    public class Spline(string filePath) : IComparable<Spline>
+    public class Spline(string fileName, string path) : OmsiFile(fileName, path)
     {
-        public string fileName { get; set; } = filePath;
-        public bool isMissing { get; set; } = false;
+        public List<Texture> textures { get; } = [];
 
-        public List<string> textures { get; } = [];
-
-        public static bool IsSplineMissing(Spline spline)
-        {
-            return spline.isMissing;
-        }
-
-        public int CompareTo(Spline other)
-        {
-            if (other is null) return 1;
-
-            return string.Compare(this.fileName,
-                other.fileName,
-                StringComparison.OrdinalIgnoreCase);
-
-        }
     }
 }

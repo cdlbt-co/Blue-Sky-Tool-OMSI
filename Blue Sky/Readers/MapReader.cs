@@ -33,11 +33,11 @@ namespace Blue_Sky.Readers
                 // Read tile list
                 else if (mapFile[i].StartsWith("[map]") && (i + 3) < mapFile.Length)
                 {
-                    string tilePath = mapFile[i + 3];
-                    Tile newTile = new(tilePath);
+                    string fileName = mapFile[i + 3];
+                    Tile newTile = new(fileName, map.folderPath);
 
                     // Check if tile missing
-                    if (!File.Exists($"{map.folderPath}\\{tilePath}"))
+                    if (!File.Exists($"{map.folderPath}\\{fileName}"))
                         newTile.isMissing = true;
 
                     map.AddTile(newTile);
@@ -65,7 +65,7 @@ namespace Blue_Sky.Readers
                     for (int j = 0; j < listLength && i + listLength < ailistFile.Length; j++)
                     {
                         string vehiclePath = ailistFile[i + j];
-                        Vehicle newVehicle = new(vehiclePath);
+                        Vehicle newVehicle = new(vehiclePath, map.omsiPath);
 
                         // Check if vehicle missing
                         if (!File.Exists($"{map.omsiPath}\\{vehiclePath}"))
@@ -82,7 +82,7 @@ namespace Blue_Sky.Readers
                     for (i += 3; i < ailistFile.Length && !ailistFile[i].StartsWith("[end]"); i++)
                     {
                         string vehiclePath = ailistFile[i].Split('\t')[0];
-                        Vehicle newVehicle = new(vehiclePath);
+                        Vehicle newVehicle = new(vehiclePath, map.omsiPath);
 
                         // Check if vehicle missing
                         if (!File.Exists($"{map.omsiPath}\\{vehiclePath}"))
@@ -107,7 +107,7 @@ namespace Blue_Sky.Readers
 
                 foreach (string parkedCarPath in parkedCarPaths)
                 {
-                    Sceneryobject newParkedCar = new(parkedCarPath);
+                    Sceneryobject newParkedCar = new(parkedCarPath, map.omsiPath);
 
                     if (!File.Exists($"{map.omsiPath}\\{parkedCarPath}"))
                         newParkedCar.isMissing = true;
@@ -132,7 +132,7 @@ namespace Blue_Sky.Readers
 
             foreach (string humanPath in humansList.Union(driversList))
             {
-                Human newHuman = new(humanPath);
+                Human newHuman = new(humanPath, map.omsiPath);
 
                 if (!File.Exists($"{map.omsiPath}\\{humanPath}"))
                     newHuman.isMissing = true;

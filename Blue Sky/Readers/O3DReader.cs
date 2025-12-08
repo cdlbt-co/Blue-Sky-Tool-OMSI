@@ -7,30 +7,25 @@ namespace Blue_Sky.Readers
 {
     internal static class O3DReader
     {
-        public static O3D ReadO3D(string filepath)
+        public static void ReadAllO3DTextures(Map map)
+        {
+            foreach (O3D o3d in map.o3ds)
+            {
+                ReadO3D(map, o3d);
+            }
+        }
+        private static void ReadO3D(Map map, O3D o3d)
         {
             byte[] o3dBytes;
-            try
-            {
-                o3dBytes = File.ReadAllBytes(filepath);
-            }
-            catch
-            {
-                return null;
-            }
-
-            O3D o3d = new(filepath);
+            try { o3dBytes = File.ReadAllBytes($"{o3d.path}\\model\\{o3d.fileName}"); }
+            catch { return; }
+            ;
 
             // Check valid o3d
-            if (o3dBytes[0] != 0x84 || o3dBytes[1] != 0x19)
-            {
-                return null;
-            }
+            if (o3dBytes[0] != 0x84 || o3dBytes[1] != 0x19) return;
 
             // Check o3d version
-
             int cursor = 3;
-
             int version = o3dBytes[2];
             bool is4ByteCount = version > 3;
             bool is4ByteFace = false;
@@ -48,27 +43,25 @@ namespace Blue_Sky.Readers
             {
                 if (o3dBytes[cursor] == 0x17)
                 {
-                    SkipVerts(is4ByteCount, ref o3d, o3dBytes, ref cursor);
+                    SkipVerts(is4ByteCount, o3dBytes, ref cursor);
                 }
                 else if (o3dBytes[cursor] == 0x49)
                 {
-                    SkipFaces(is4ByteCount, is4ByteFace, ref o3d, o3dBytes, ref cursor);
+                    SkipFaces(is4ByteCount, is4ByteFace, o3dBytes, ref cursor);
                 }
                 else if (o3dBytes[cursor] == 0x26)
                 {
-                    ReadMatls(ref o3d, o3dBytes, ref cursor);
+                    ReadMatls(map, o3d, o3dBytes, ref cursor);
                     break;
                 }
                 else
                 {
-                    return null;
+                    return;
                 }
             }
-
-            return o3d;
         }
 
-        public static void SkipVerts(bool is4ByteCount, ref O3D o3d, byte[] o3dBytes, ref int cursor)
+        public static void SkipVerts(bool is4ByteCount, byte[] o3dBytes, ref int cursor)
         {
             // Get vertex count
             cursor++;
@@ -81,7 +74,7 @@ namespace Blue_Sky.Readers
             cursor += vertCount * 32;
         }
 
-        public static void SkipFaces(bool is4ByteCount, bool is4ByteFace, ref O3D o3d, byte[] o3dBytes, ref int cursor)
+        public static void SkipFaces(bool is4ByteCount, bool is4ByteFace, byte[] o3dBytes, ref int cursor)
         {
             // Get face count
             cursor++;
@@ -94,7 +87,7 @@ namespace Blue_Sky.Readers
             cursor += faceCount * (is4ByteFace ? 14 : 8);
         }
 
-        public static void ReadMatls(ref O3D o3d, byte[] o3dBytes, ref int cursor)
+        public static void ReadMatls(Map map, O3D o3d, byte[] o3dBytes, ref int cursor)
         {
             // Get material count
             cursor++;
@@ -112,8 +105,15 @@ namespace Blue_Sky.Readers
                 Array.Copy(o3dBytes, cursor, matlPathChars, 0, matlPathLen);
                 cursor += matlPathLen;
 
-                string matlPath = Encoding.ASCII.GetString(matlPathChars);
-                o3d.AddMaterial(matlPath);
+                string fileName = Encoding.ASCII.GetString(matlPathChars);
+                string matlPath = $"{o3d.path}\\texture";
+                Texture newMatl = new Texture(fileName, matlPath, "o3d Material");
+
+                if (!File.Exists($"{matlPath}\\{fileName}")) newMatl.isMissing = true;
+
+                o3d.AddMaterial(newMatl);
+                o3d.owner.AddTexture(newMatl);
+                map.AddTexture(newMatl);
             }
         }
     }

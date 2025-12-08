@@ -1,43 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Globalization;
 
 namespace Blue_Sky.Classes
 {
-    public class O3D(string fileName) : IComparable<O3D>
+    public class O3D(string fileName, string path, Sceneryobject owner) : OmsiFile(fileName, path)
     {
-        public string fileName { get; set; } = fileName;
-        public bool isMissing { get; set; } = false;
+        public readonly Sceneryobject owner = owner;
 
-        private readonly List<Material> materials = [];
+        private readonly HashSet<string> readMaterials = [];
 
-        public void AddMaterial(string matlPath)
+        public readonly List<Texture> materials = [];
+
+        public bool AddMaterial(Texture texture)
         {
-            materials.Add(new Material(matlPath));
-        }
-
-        public List<string> GetMaterialPathList()
-        {
-            return [.. materials.Select(x => x.ToString())];
-        }
-
-        private class Material(string matlPath)
-        {
-            private readonly string matlPath = matlPath;
-
-            override public string ToString()
-            {
-                return matlPath;
-            }
-        }
-        public int CompareTo(O3D other)
-        {
-            if (other is null) return 1;
-
-            return string.Compare(this.fileName,
-                other.fileName,
-                StringComparison.OrdinalIgnoreCase);
-
+            bool exists = readMaterials.Add(texture.fileName);
+            if (exists)
+                this.materials.Add(texture);
+            return exists;
         }
     }
 
