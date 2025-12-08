@@ -1,19 +1,25 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11217.181 d18.0
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blue Sky", "Blue Sky\Blue Sky.csproj", "{61A5BF67-58F7-4580-A6FB-D31BC98680C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{61A5BF67-58F7-4580-A6FB-D31BC98680C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{61A5BF67-58F7-4580-A6FB-D31BC98680C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61A5BF67-58F7-4580-A6FB-D31BC98680C9}.Debug|x64.ActiveCfg = Debug|x64
+		{61A5BF67-58F7-4580-A6FB-D31BC98680C9}.Debug|x64.Build.0 = Debug|x64
 		{61A5BF67-58F7-4580-A6FB-D31BC98680C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61A5BF67-58F7-4580-A6FB-D31BC98680C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61A5BF67-58F7-4580-A6FB-D31BC98680C9}.Release|x64.ActiveCfg = Release|x64
+		{61A5BF67-58F7-4580-A6FB-D31BC98680C9}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
