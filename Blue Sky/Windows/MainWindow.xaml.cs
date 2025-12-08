@@ -223,18 +223,19 @@ namespace Blue_Sky
 
         private void ListView_UpdateColumnWidth(object sender, RoutedEventArgs e)
         {
+            // Get the gridview to be resized
             ListView lv = sender as ListView;
             GridView gv = lv.View as GridView;
 
+            // Get the total available width the gridview can be
             double availableWidth = lv.ActualWidth - SystemParameters.VerticalScrollBarWidth;
 
+            // Subtract the width of the columns other than main filename column
             int columns = gv.Columns.Count;
-            for (int i = 1; i < columns; i++)
-            {
-                availableWidth -= gv.Columns[i].Width;
-            }
-
-            gv.Columns[0].Width = availableWidth;
+            for (int i = 1; i < columns; i++) availableWidth -= gv.Columns[i].Width;
+            
+            // If available space for first column is still above 0 adjust accordingly
+            if (availableWidth>0) gv.Columns[0].Width = availableWidth;
         }
 
         private static void ShowFileInFolder(string filePath)

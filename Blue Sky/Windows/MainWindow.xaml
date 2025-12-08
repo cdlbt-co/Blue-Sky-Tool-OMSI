@@ -198,7 +198,8 @@
                      x:Name="tabTiles">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid Margin="4"
@@ -228,7 +229,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Objects"
-                                                    Width="72">
+                                                    Width="70">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock TextAlignment="Center"
@@ -237,7 +238,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Splines"
-                                                    Width="72">
+                                                    Width="68">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock TextAlignment="Center"
@@ -292,8 +293,11 @@
                             </ListView.ItemContainerStyle>
                         </ListView>
                     </Grid>
+                    <GridSplitter Grid.Column="1"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Center" />
                     <Grid Margin="4"
-                          Grid.Column="1">
+                          Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
@@ -359,7 +363,8 @@
                      x:Name="tabObjects">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid Margin="4"
@@ -389,7 +394,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Models"
-                                                    Width="72">
+                                                    Width="70">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock TextAlignment="Center"
@@ -398,7 +403,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Textures"
-                                                    Width="76">
+                                                    Width="74">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock TextAlignment="Center"
@@ -407,7 +412,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Scripts"
-                                                    Width="76">
+                                                    Width="66">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock TextAlignment="Center"
@@ -462,8 +467,11 @@
                             </ListView.ItemContainerStyle>
                         </ListView>
                     </Grid>
+                    <GridSplitter Grid.Column="1"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Center"/>
                     <Grid Margin="4"
-                          Grid.Column="1">
+                          Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
@@ -529,7 +537,8 @@
                      x:Name="tabSplines">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid Margin="4"
@@ -559,7 +568,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Textures"
-                                                    Width="76">
+                                                    Width="74">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock TextAlignment="Center"
@@ -614,8 +623,11 @@
                             </ListView.ItemContainerStyle>
                         </ListView>
                     </Grid>
+                    <GridSplitter Grid.Column="1"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Center" />
                     <Grid Margin="4"
-                          Grid.Column="1">
+                          Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
@@ -681,7 +693,8 @@
                      x:Name="tabAicar">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid Margin="4"
@@ -755,8 +768,11 @@
                             </ListView.ItemContainerStyle>
                         </ListView>
                     </Grid>
+                    <GridSplitter Grid.Column="1"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Center" />
                     <Grid Margin="4"
-                          Grid.Column="1">
+                          Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
@@ -822,7 +838,8 @@
                      x:Name="tabHuman">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid Margin="4"
@@ -896,8 +913,11 @@
                             </ListView.ItemContainerStyle>
                         </ListView>
                     </Grid>
+                    <GridSplitter Grid.Column="1"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Center" />
                     <Grid Margin="4"
-                          Grid.Column="1">
+                          Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
