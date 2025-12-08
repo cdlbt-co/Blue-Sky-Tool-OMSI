@@ -25,7 +25,7 @@ namespace Blue_Sky.Readers
             if (o3dBytes[0] != 0x84 || o3dBytes[1] != 0x19) return;
 
             // Check o3d version
-            int cursor = 3;
+            uint cursor = 3;
             int version = o3dBytes[2];
             bool is4ByteCount = version > 3;
             bool is4ByteFace = false;
@@ -61,44 +61,44 @@ namespace Blue_Sky.Readers
             }
         }
 
-        public static void SkipVerts(bool is4ByteCount, byte[] o3dBytes, ref int cursor)
+        public static void SkipVerts(bool is4ByteCount, byte[] o3dBytes, ref uint cursor)
         {
             // Get vertex count
             cursor++;
-            int vertCount = is4ByteCount ?
-                BitConverter.ToInt32(o3dBytes, cursor) :
-                BitConverter.ToInt16(o3dBytes, cursor);
-            cursor += is4ByteCount ? 4 : 2;
+            uint vertCount = is4ByteCount ?
+                BitConverter.ToUInt32(o3dBytes, (int)cursor) :
+                BitConverter.ToUInt16(o3dBytes, (int)cursor);
+            cursor += (uint) (is4ByteCount ? 4 : 2);
 
             // Move cursor by 8 * 4 bytes for each vertex
             cursor += vertCount * 32;
         }
 
-        public static void SkipFaces(bool is4ByteCount, bool is4ByteFace, byte[] o3dBytes, ref int cursor)
+        public static void SkipFaces(bool is4ByteCount, bool is4ByteFace, byte[] o3dBytes, ref uint cursor)
         {
             // Get face count
             cursor++;
-            int faceCount = is4ByteCount ?
-                BitConverter.ToInt32(o3dBytes, cursor) :
-                BitConverter.ToInt16(o3dBytes, cursor);
-            cursor += is4ByteCount ? 4 : 2;
+            uint faceCount = is4ByteCount ?
+                BitConverter.ToUInt32(o3dBytes, (int)cursor) :
+                BitConverter.ToUInt16(o3dBytes, (int)cursor);
+            cursor += (uint)(is4ByteCount ? 4 : 2);
 
             // Move cursor by 11 * 4 bytes for each face
-            cursor += faceCount * (is4ByteFace ? 14 : 8);
+            cursor += (uint)(faceCount * (is4ByteFace ? 14 : 8));
         }
 
-        public static void ReadMatls(Map map, O3D o3d, byte[] o3dBytes, ref int cursor)
+        public static void ReadMatls(Map map, O3D o3d, byte[] o3dBytes, ref uint cursor)
         {
             // Get material count
             cursor++;
-            int matlCount = BitConverter.ToInt16(o3dBytes, cursor);
+            int matlCount = BitConverter.ToInt16(o3dBytes, (int)cursor);
             cursor += 2;
 
             for (int i = 0; i < matlCount; i++)
             {
                 //Move to byte for matl path length
                 cursor += 11 * 4;
-                int matlPathLen = o3dBytes[cursor];
+                uint matlPathLen = o3dBytes[cursor];
                 cursor++;
 
                 byte[] matlPathChars = new byte[matlPathLen];
