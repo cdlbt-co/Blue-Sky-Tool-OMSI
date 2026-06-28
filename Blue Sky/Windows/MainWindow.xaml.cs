@@ -25,7 +25,7 @@ namespace Blue_Sky
             InitializeComponent();
         }
 
-        private void btnLogFile_Click(object sender, RoutedEventArgs e)
+        private async void btnLogFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog pickLogFile = new OpenFileDialog
             {
@@ -46,51 +46,23 @@ namespace Blue_Sky
                 m.Show();
                 BlueSkyWindow.IsEnabled = false;
 
-                Task task = Task.Factory.StartNew(() =>
+                Task task = Task.Factory.StartNew(async () =>
                 {
                     this.Dispatcher.Invoke((Action)(() => m.lblLoading.Content = "Reading logfile.txt..."));
 
-                    string[] logfile = File.ReadAllLines(pickLogFile.FileName);
+                    Logfile file = new();
 
-                    HashSet<string> readInfo = new(StringComparer.OrdinalIgnoreCase);
-                    HashSet<string> readWarn = new(StringComparer.OrdinalIgnoreCase);
-                    HashSet<string> readError = new(StringComparer.OrdinalIgnoreCase);
-                    List<string> info = [];
-                    List<string> warn = [];
-                    List<string> error = [];
-
-                    foreach (string line in logfile)
-                    {
-                        if (line.Contains(" -  -   "))
-                        {
-                            // Remove the time prefix of log file entries
-                            string newLine = line.Split([" -  -   "], StringSplitOptions.None)[1].TrimStart();
-
-                            // Check for repeating entries, only add non duplicates to list and list box
-                            if (newLine.StartsWith("Information:") && readInfo.Add(newLine[13..]))
-                            {
-                                info.Add(newLine[13..]);
-                            }
-                            if (newLine.StartsWith("Warning:") && readWarn.Add(newLine[15..]))
-                            {
-                                warn.Add(newLine[15..]);
-                            }
-                            if (newLine.StartsWith("Error:") && readError.Add(newLine[17..]))
-                            {
-                                error.Add(newLine[17..]);
-                            }
-                        }
-                    }
+                    await LogReader.ReadLogfileAsync(pickLogFile.FileName, file);
 
                     this.Dispatcher.Invoke((Action)(() =>
                     {
                         m.lblLoading.Content = "Collecting Data...";
 
-                        tabLogFileWarn.Header = "Warnings (" + warn.Count + ")";
-                        tabLogFileError.Header = "Errors (" + error.Count + ")";
-                        txtLogFileInfo.Text = String.Join("\r\n", info);
-                        txtLogFileWarn.Text = String.Join("\r\n", warn);
-                        txtLogFileError.Text = String.Join("\r\n", error);
+                        tabLogFileWarn.Header = "Warnings (" + file.warn.Count + ")";
+                        tabLogFileError.Header = "Errors (" + file.error.Count + ")";
+                        txtLogFileInfo.Text = String.Join("\r\n", file.info);
+                        txtLogFileWarn.Text = String.Join("\r\n", file.warn);
+                        txtLogFileError.Text = String.Join("\r\n", file.error);
 
                         // Re-enable main window and close loading screen
                         BlueSkyWindow.IsEnabled = true;
