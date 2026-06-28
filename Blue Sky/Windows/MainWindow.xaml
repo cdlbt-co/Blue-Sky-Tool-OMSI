@@ -251,7 +251,7 @@
                             <ListView.Resources>
                                 <ContextMenu x:Key="lvTilesListMenu">
                                     <MenuItem Header="Show in File Explorer"
-                                              Click="lvTilesList_ClickExplore" />
+                                              Click="ListView_ClickExplore" />
                                     <MenuItem Header="View Details"
                                               Click="lvTilesList_ClickDetail" />
                                 </ContextMenu>
@@ -425,7 +425,7 @@
                             <ListView.Resources>
                                 <ContextMenu x:Key="lvObjectsListMenu">
                                     <MenuItem Header="Show in File Explorer"
-                                              Click="lvObjectsList_ClickExplore" />
+                                              Click="ListView_ClickExplore" />
                                     <MenuItem Header="View Details"
                                               Click="lvObjectsList_ClickDetail" />
                                 </ContextMenu>
@@ -581,7 +581,7 @@
                             <ListView.Resources>
                                 <ContextMenu x:Key="lvSplinesListMenu">
                                     <MenuItem Header="Show in File Explorer"
-                                              Click="lvSplinesList_ClickExplore" />
+                                              Click="ListView_ClickExplore" />
                                     <MenuItem Header="View Details"
                                               Click="lvSplinesList_ClickDetail" />
                                 </ContextMenu>
@@ -728,7 +728,7 @@
                             <ListView.Resources>
                                 <ContextMenu x:Key="lvVehiclesListMenu">
                                     <MenuItem Header="Show in File Explorer"
-                                              Click="lvVehiclesList_ClickExplore" />
+                                              Click="ListView_ClickExplore" />
                                 </ContextMenu>
                             </ListView.Resources>
                             <ListView.ItemContainerStyle>
@@ -873,7 +873,7 @@
                             <ListView.Resources>
                                 <ContextMenu x:Key="lvHumansListMenu">
                                     <MenuItem Header="Show in File Explorer"
-                                              Click="lvHumansList_ClickExplore" />
+                                              Click="ListView_ClickExplore" />
                                 </ContextMenu>
                             </ListView.Resources>
                             <ListView.ItemContainerStyle>

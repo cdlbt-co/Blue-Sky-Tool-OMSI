@@ -206,9 +206,9 @@ namespace Blue_Sky
             // Subtract the width of the columns other than main filename column
             int columns = gv.Columns.Count;
             for (int i = 1; i < columns; i++) availableWidth -= gv.Columns[i].Width;
-            
+
             // If available space for first column is still above 0 adjust accordingly
-            if (availableWidth>0) gv.Columns[0].Width = availableWidth;
+            if (availableWidth > 0) gv.Columns[0].Width = availableWidth;
         }
 
         private static void ShowFileInFolder(string filePath)
@@ -220,7 +220,7 @@ namespace Blue_Sky
                     MessageBox.Show($"File not found: {filePath}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                var psi = new ProcessStartInfo
+                ProcessStartInfo psi = new()
                 {
                     FileName = "explorer.exe",
                     Arguments = $"/select,\"{filePath}\"",
@@ -236,9 +236,9 @@ namespace Blue_Sky
             }
         }
 
-        private void lvTilesList_ClickExplore(object sender, RoutedEventArgs e)
+        private void ListView_ClickExplore(object sender, RoutedEventArgs e)
         {
-            ShowFileInFolder($"{map.folderPath}\\{((sender as MenuItem).DataContext as Tile).fileName}");
+            ShowFileInFolder(((sender as MenuItem).DataContext as OmsiFile).fullPathName);
         }
 
         private void lvTilesList_ClickDetail(object sender, RoutedEventArgs e)
@@ -247,32 +247,12 @@ namespace Blue_Sky
             tw.Show();
         }
 
-        private void lvObjectsList_ClickExplore(object sender, RoutedEventArgs e)
-        {
-            ShowFileInFolder($"{map.omsiPath}\\{((sender as MenuItem).DataContext as Sceneryobject).fileName}");
-        }
-
         private void lvObjectsList_ClickDetail(object sender, RoutedEventArgs e)
         {
         }
 
-        private void lvSplinesList_ClickExplore(object sender, RoutedEventArgs e)
-        {
-            ShowFileInFolder($"{map.omsiPath}\\{((sender as MenuItem).DataContext as Spline).fileName}");
-        }
-
         private void lvSplinesList_ClickDetail(object sender, RoutedEventArgs e)
         {
-        }
-
-        private void lvVehiclesList_ClickExplore(object sender, RoutedEventArgs e)
-        {
-            ShowFileInFolder($"{map.omsiPath}\\{((sender as MenuItem).DataContext as Vehicle).fileName}");
-        }
-
-        private void lvHumansList_ClickExplore(object sender, RoutedEventArgs e)
-        {
-            ShowFileInFolder($"{map.omsiPath}\\{((sender as MenuItem).DataContext as Human).fileName}");
         }
 
         private void tabMap_Clear()
@@ -300,11 +280,6 @@ namespace Blue_Sky
             txtLogFileInfo.Clear();
             txtLogFileWarn.Clear();
             txtLogFileError.Clear();
-        }
-
-        private void lvTilesList_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-
         }
     }
 }
