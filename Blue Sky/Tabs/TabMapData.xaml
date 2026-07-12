@@ -1,0 +1,206 @@
+﻿<local:Tab x:Class="Blue_Sky.Tabs.TabMapData"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:local="clr-namespace:Blue_Sky.Tabs"
+           mc:Ignorable="d"
+           Loaded="OnControlLoaded">
+    <Grid VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch"
+          Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel HorizontalAlignment="Stretch"
+                   VerticalAlignment="Top"
+                   Grid.Row="0">
+            <Button Margin="4"
+                    Content="Open map..."
+                    Click="btnMap_Click"
+                    Style="{DynamicResource AccentButtonStyle}"
+                    IsDefault="True" />
+            <TextBox Margin="4"
+                     TextWrapping="NoWrap"
+                     IsReadOnly="True"
+                     x:Name="txtMapDir" />
+        </DockPanel>
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Grid Margin="4"
+                  Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="440" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <Label Margin="4,4,4,0"
+                           Content="Map Name" />
+                    <TextBox Margin="4,0,4,4"
+                             TextWrapping="NoWrap"
+                             IsReadOnly="True"
+                             x:Name="txtMapName" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Margin="4,4,4,0"
+                                   Content="Total Tiles" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapTileCount" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Label Margin="4,4,4,0"
+                                   Content="Missing Tiles" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapTileMissing" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Margin="4,4,4,0"
+                                   Content="Total Objects" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapObjectCount" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Label Margin="4,4,4,0"
+                                   Content="Missing Objects" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapObjectMissing" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Margin="4,4,4,0"
+                                   Content="Total Splines" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapSplineCount" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Label Margin="4,4,4,0"
+                                   Content="Missing Splines" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapSplineMissing" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Margin="4,4,4,0"
+                                   Content="Total AI Vehicles" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapAicarCount" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Label Margin="4,4,4,0"
+                                   Content="Missing AI Vehicles" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapAicarMissing" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Margin="4,4,4,0"
+                                   Content="Total Humans" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapHumanCount" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Label Margin="4,4,4,0"
+                                   Content="Missing Humans" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapHumanMissing" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Margin="4,4,4,0"
+                                   Content="Total Textures" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapTextureCount" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Label Margin="4,4,4,0"
+                                   Content="Missing Textures" />
+                            <TextBox Margin="4,0,4,4"
+                                     TextWrapping="NoWrap"
+                                     IsReadOnly="True"
+                                     x:Name="txtMapTextureMissing" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <Grid HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Margin="4,4,4,0"
+                           Grid.Row="0"
+                           Content="Map Description" />
+                    <TextBox Margin="4,0,4,4"
+                             TextWrapping="Wrap"
+                             IsReadOnly="True"
+                             Grid.Row="1"
+                             x:Name="txtMapDescription" />
+                </Grid>
+            </Grid>
+            <Image VerticalAlignment="Stretch"
+                   HorizontalAlignment="Stretch"
+                   Margin="4"
+                   Grid.Column="1"
+                   x:Name="imgMap" />
+        </Grid>
+    </Grid>
+</local:Tab>
