@@ -68,7 +68,7 @@ namespace Blue_Sky.Readers
             uint vertCount = is4ByteCount ?
                 BitConverter.ToUInt32(o3dBytes, (int)cursor) :
                 BitConverter.ToUInt16(o3dBytes, (int)cursor);
-            cursor += (uint) (is4ByteCount ? 4 : 2);
+            cursor += (uint)(is4ByteCount ? 4 : 2);
 
             // Move cursor by 8 * 4 bytes for each vertex
             cursor += vertCount * 32;
@@ -101,15 +101,27 @@ namespace Blue_Sky.Readers
                 uint matlPathLen = o3dBytes[cursor];
                 cursor++;
 
+                // If math path length is 0 meaning no texture file specified, skip this material
+                if (matlPathLen <= 0) continue;
+
                 byte[] matlPathChars = new byte[matlPathLen];
                 Array.Copy(o3dBytes, cursor, matlPathChars, 0, matlPathLen);
                 cursor += matlPathLen;
 
-                string fileName = Encoding.ASCII.GetString(matlPathChars);
+                string fullFileName = Encoding.ASCII.GetString(matlPathChars);
+                string fileName = Path.GetFileNameWithoutExtension(fullFileName);
+                string fileExt = Path.GetExtension(fullFileName);
                 string matlPath = $"{o3d.path}\\texture";
-                Texture newMatl = new Texture(fileName, matlPath, "o3d Material");
+                Texture newMatl = new Texture(fullFileName, matlPath, $"o3d Material: {o3d.fullPathName}");
 
-                if (!File.Exists($"{matlPath}\\{fileName}")) newMatl.isMissing = true;
+                if (!File.Exists($"{matlPath}\\{fullFileName}")) newMatl.isMissing = true;
+
+                if (File.Exists($"{matlPath}\\{fileName}.dds"))
+                {
+                    newMatl.isMissing = false;
+                    newMatl.fileName = $"{fileName}.dds";
+                    newMatl.fullPathName = $"{matlPath}\\{newMatl.fileName}";
+                }
 
                 o3d.AddMaterial(newMatl);
                 o3d.owner.AddTexture(newMatl);

@@ -43,7 +43,36 @@ namespace Blue_Sky.Readers
                     map.AddTile(newTile);
                     i += 3;
                 }
+
+                // Read ground textures
+                else if (mapFile[i].StartsWith("[groundtex]") && (i + 2) < mapFile.Length)
+                {
+                    // Read next 2 lines for ground texture
+                    map.AddTexture(ReadGroundTexture(mapFile[i + 1], map));
+                    map.AddTexture(ReadGroundTexture(mapFile[i + 2], map));
+                    i += 2;
+                }
             }
+        }
+
+        private static Texture ReadGroundTexture(string fileName, Map map)
+        {
+            Texture groundTex = new Texture(fileName, "", "ground texture");
+
+            // Check if texture reference is from map folder
+            if (File.Exists($"{map.folderPath}\\{fileName}"))
+                groundTex.path = map.folderPath;
+            // or reference is from omsi root dir
+            else if (File.Exists($"{map.omsiPath}\\{fileName}"))
+                groundTex.path = map.omsiPath;
+            // if not found in either location set missing flag
+            else
+            {
+                groundTex.path = map.folderPath;
+                groundTex.isMissing = true;
+            }
+
+            return groundTex;
         }
 
         public static void ReadAilist(Map map)

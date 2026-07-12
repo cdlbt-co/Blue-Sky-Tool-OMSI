@@ -30,11 +30,11 @@ namespace Blue_Sky.Readers
                     scoFile[i + 1].EndsWith("o3d", StringComparison.OrdinalIgnoreCase))
                 {
                     string o3dFileName = scoFile[i + 1];
-                    string scoFolderPath = FolderHelper.UpDir(scoPath);
-                    O3D newO3d = new(o3dFileName, scoFolderPath, sceneryobject);
+                    string scoFolder = FolderHelper.UpDir(scoPath);
+                    O3D newO3d = new(o3dFileName, scoFolder, sceneryobject);
 
                     // Check if object missing
-                    if (!File.Exists($"{scoFolderPath}\\model\\{o3dFileName}"))
+                    if (!File.Exists($"{scoFolder}\\model\\{o3dFileName}"))
                         newO3d.isMissing = true;
 
                     sceneryobject.AddO3D(newO3d);
